@@ -4,7 +4,7 @@
 
 ##Requirements
 
-<img src="./public/contexto-proyecto.png">
+<img src="./public/img/contexto-proyecto.png">
 
 ## Authors
 
