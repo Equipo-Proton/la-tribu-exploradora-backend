@@ -43,6 +43,29 @@ This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNA
 ***
 ***
 
+## 🛠️ Visual Design: Sketch, MockUp and Prototype
+### 1.Loading Page
+![Loading Page](https://user-images.githubusercontent.com/104347185/190474172-6546d20b-67a3-42fb-96e6-ed1d8542af75.png)
+### 2.Login for users View
+![Login Page](https://user-images.githubusercontent.com/104347185/190474183-87d80ad8-016f-48f2-a1b0-83f71e243761.png)
+### 3.Students play View
+![Keyboard Screnn](https://user-images.githubusercontent.com/104347185/190477618-49362f4f-371f-4594-b231-82d2a453f386.png)
+### 4.Choice of games for students, Teacher's view
+![Teacher Panel Administration](https://user-images.githubusercontent.com/104347185/190479045-a97d25c4-c60f-4b3d-96e6-621a966776ef.png)
+
+## Work methodology
+
+- TDD
+- Agile
+- Scrum
+- Pair programming
+
+## Tools and technologies used
+
+| Front End | Back End | Diseño y organización | 
+| :---: | :---: | :---: |
+| <img src="https://github.com/Yelose/Yelose/blob/main/img/vscode.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/html.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/bootstrap.png">  <img src="https://github.com/Yelose/Yelose/blob/main/img/css.png"> <img src="https://camo.githubusercontent.com/bcd4bda49ef6cd9537db065920f4f4f6ac670eae0e0adf2c5133c19b319f1574/68747470733a2f2f627261646c632e67616c6c65727963646e2e76736173736574732e696f2f657874656e73696f6e732f627261646c632f7673636f64652d7461696c77696e646373732f302e322e302f313535383034303536333634392f4d6963726f736f66742e56697375616c53747564696f2e53657276696365732e49636f6e732e44656661756c74"> | <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU3_893T2dAaGeZ6fb9y9rZxc9Cu-TnUKx0Q&usqp=CAU"> <img src="https://github.com/Yelose/Yelose/blob/main/img/php.png">  <img src="https://github.com/Yelose/Yelose/blob/main/img/mysql.png"> | <img src="https://github.com/Yelose/Yelose/blob/main/img/figma.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/jira.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/google.png">  |
+
 ## Authors
 
 | Nombre | Roll | <img src="https://github.com/Yelose/Yelose/blob/main/img/github.png" width="30px" height="30px"> |
