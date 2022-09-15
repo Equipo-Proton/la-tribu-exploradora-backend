@@ -2,6 +2,7 @@
 
 ## Description
 This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNALÓN). A Web Application as a Game to help kids between 3 to 6 six years old to learn words and vocabulary while they are playing a game.
+As a software team we have to build an app that allows children learn by doing through techonology.
 
 ## Requirementes
 
