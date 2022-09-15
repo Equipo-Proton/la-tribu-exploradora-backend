@@ -66,6 +66,13 @@ This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNA
 | :---: | :---: | :---: |
 | <img src="https://github.com/Yelose/Yelose/blob/main/img/vscode.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/html.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/bootstrap.png">  <img src="https://github.com/Yelose/Yelose/blob/main/img/css.png"> <img src="https://camo.githubusercontent.com/bcd4bda49ef6cd9537db065920f4f4f6ac670eae0e0adf2c5133c19b319f1574/68747470733a2f2f627261646c632e67616c6c65727963646e2e76736173736574732e696f2f657874656e73696f6e732f627261646c632f7673636f64652d7461696c77696e646373732f302e322e302f313535383034303536333634392f4d6963726f736f66742e56697375616c53747564696f2e53657276696365732e49636f6e732e44656661756c74"> | <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU3_893T2dAaGeZ6fb9y9rZxc9Cu-TnUKx0Q&usqp=CAU"> <img src="https://github.com/Yelose/Yelose/blob/main/img/php.png">  <img src="https://github.com/Yelose/Yelose/blob/main/img/mysql.png"> | <img src="https://github.com/Yelose/Yelose/blob/main/img/figma.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/jira.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/google.png">  |
 
+## Documentation
+
+- [Dailys](https://docs.google.com/document/d/1gGHcJYTPoZo_kbkBN_cQCpXgPu5JvurKWr8xd1vH7Lo/edit)
+- [Presentation PPTX](https://docs.google.com/presentation/d/1TiQ86Y-N194oHaoAA1V5erXUQw2_3wZ_YzafjYdXoQs/edit?usp=sharing)
+- [Prototype](https://www.figma.com/file/HCGDAXOHXuOM567hPHBryR/Proyecto-Pedag%C3%B3gico?node-id=111%3A3)
+- [UserFlow](https://www.figma.com/file/R3aFH6bPeETNHazU5k2zO4/Valnal%C3%B3n-User-Flow?node-id=0%3A1)
+
 ## Authors
 
 | Nombre | Roll | <img src="https://github.com/Yelose/Yelose/blob/main/img/github.png" width="30px" height="30px"> |
@@ -76,3 +83,10 @@ This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNA
 | Guillermo García | Web Developer | https://github.com/guillerdev97 |
 | Juan Francisco Balseca  | Product Owner| https://github.com/sudobuda |
 | Mario Jiménez  | Web Developer| https://github.com/majifer |
+
+## Acknowledgements
+
+ - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
+ - [Awesome README](https://github.com/matiassingers/awesome-readme)
+ - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+
