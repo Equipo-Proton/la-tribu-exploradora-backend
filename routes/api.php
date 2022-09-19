@@ -20,14 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('login', [UserController::class, 'login']);
+Route::post('/login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
-    Route::post('register', [UserController::class, 'register']);
-    Route::get('users', [UserController::class, 'getUsers']);
-    Route::get('userprofile', [UserController::class, 'userProfile']);
-    Route::get('logout', [UserController::class, 'logout']);
-    Route::post('update/{id}', [UserController::class, 'update']);
-    Route::delete('delete/{id}', [UserController::class, 'delete']);
+    Route::post('/register', [UserController::class, 'register']);
+    Route::get('/', [UserController::class, 'getUsers']);
+    Route::get('/userprofile', [UserController::class, 'userProfile']);
+    Route::get('/logout', [UserController::class, 'logout']);
+    Route::post('/update/{id}', [UserController::class, 'update']);
+    Route::delete('/delete/{id}', [UserController::class, 'delete']);
 
 });
