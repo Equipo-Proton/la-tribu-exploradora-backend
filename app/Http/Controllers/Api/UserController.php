@@ -76,6 +76,21 @@ class UserController extends Controller
 
     public function userProfile()
     {
+        
+        $user = auth()->user();
+
+        if($user){
+            return response()->json([
+                "status" => 1,
+                "msg" => "This is the user profile",
+                "data" => $user 
+            ],200);  
+        }
+        
+        return response()->json([
+            "status" => 0,
+            "msg" => "There are no users authenticated"  
+        ]);   
     }
 
     public function logout()
