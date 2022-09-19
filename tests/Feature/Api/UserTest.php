@@ -1,9 +1,12 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -13,10 +16,38 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
-    {
-        $response = $this->get('/');
 
+    use RefreshDatabase;
+    public function test_if_auth_user_can_see_users_list()
+    {
+        $this->withExceptionHandling();
+
+        User::factory(5)->create();
+
+        Sanctum::actingAs(
+            $user = User::factory()->create([
+                    'name' => 'Pedro',
+                    'email' => 'pedro@mail.com',
+                    'password' => 12345
+            ])
+        );
+
+        $response = $this->get('/api');        
         $response->assertStatus(200);
-    }
+    } 
+
+    public function test_if_auth_user_can_see_users_list_optional()
+    {
+        $this->withoutExceptionHandling();
+
+        User::factory()->create();
+
+        Sanctum::actingAs(
+            $user = User::factory()->create()
+        );
+    
+        $response = $this->get('/api');        
+        $response->assertStatus(200);
+    } 
+
 }
