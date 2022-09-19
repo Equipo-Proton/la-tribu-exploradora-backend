@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-
-    // create user
     public function register(Request $request)
     {
         $request->validate([
@@ -20,34 +18,35 @@ class UserController extends Controller
         ]);
 
         $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user = auth()->user();
 
-        $user->save();
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'User created',
-            'data' => $user
-        ], 200);
+        if($user) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+    
+            $user->save();
+    
+            return response()->json([
+                'status' => 1,
+                'msg' => 'User created',
+                'data' => $user
+            ], 200);
+        }
+       
     }
 
-    // generate token-login
     public function login(Request $request)
     {
-        // validation of form login
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
-        // find user with the same email
         $user = User::where('email', '=', $request->email)->first();
 
-        // check if form password is equal to user password on database
-        if(isset($user->id)) {
-            if(Hash::check($request->password, $user->password)) {
+        if (isset($user->id)) {
+            if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
 
                 return response()->json([
@@ -72,30 +71,41 @@ class UserController extends Controller
 
     public function getUsers()
     {
+        $users = User::all();
+        $user = auth()->user();
+
+        if($user) {
+            return response()->json([
+                'status' => 1,
+                'msg' => 'This is the list of users',
+                'data' => $users
+            ], 200);
+        }
+
     }
 
     public function userProfile()
     {
-        
         $user = auth()->user();
 
-        if($user){
+        if ($user) {
             return response()->json([
                 "status" => 1,
                 "msg" => "This is the user profile",
-                "data" => $user 
-            ],200);  
+                "data" => $user
+            ], 200);
         }
-        
+
         return response()->json([
             "status" => 0,
-            "msg" => "There are no users authenticated"  
-        ]);   
+            "msg" => "There are no users authenticated"
+        ], 401);
     }
 
     public function logout()
     {
         $user = auth()->user();
+
         auth()->user()->tokens()->delete();
 
         return response()->json([
@@ -105,11 +115,11 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function delete() {
-
+    public function delete()
+    {
     }
 
-    public function update() {
-
+    public function update()
+    {
     }
 }
