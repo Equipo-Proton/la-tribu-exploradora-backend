@@ -33,8 +33,41 @@ class UserController extends Controller
         ], 200);
     }
 
+    // generate token-login
     public function login(Request $request)
     {
+        // validation of form login
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        // find user with the same email
+        $user = User::where('email', '=', $request->email)->first();
+
+        // check if form password is equal to user password on database
+        if(isset($user->id)) {
+            if(Hash::check($request->password, $user->password)) {
+                $token = $user->createToken('auth_token')->plainTextToken;
+
+                return response()->json([
+                    'status' => 1,
+                    'msg' => 'You are logged in',
+                    'user' => $user,
+                    'access_token' => $token
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 0,
+                'msg' => 'Incorrect password'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 0,
+            'msg' => 'User no registered'
+        ], 404);
     }
 
     public function getUsers()
@@ -47,5 +80,13 @@ class UserController extends Controller
 
     public function logout()
     {
+    }
+
+    public function delete() {
+
+    }
+
+    public function update() {
+
     }
 }
