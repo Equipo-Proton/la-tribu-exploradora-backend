@@ -115,11 +115,33 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function delete()
+    public function delete($id)
     {
+        
     }
 
-    public function update()
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed'
+        ]);
+
+        $user = User::findOrFail($id);
+
+        if(auth()->user()) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+    
+            $user->update();
+    
+            return response()->json([
+                'status' => 1,
+                'msg' => 'User updated',
+                'data' => $user
+            ], 200);
+        }
     }
 }
