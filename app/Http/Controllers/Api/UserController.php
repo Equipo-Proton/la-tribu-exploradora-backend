@@ -80,6 +80,14 @@ class UserController extends Controller
 
     public function logout()
     {
+        $user = auth()->user();
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            "status" => 1,
+            "msg" => "You are logged out",
+            "data" => $user
+        ], 200);
     }
 
     public function delete() {
