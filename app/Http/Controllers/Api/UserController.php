@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // postman and middleware
+    // i am the teacher and i can do this
+    // refactor
     public function register(Request $request)
     {
         $request->validate([
@@ -20,25 +21,21 @@ class UserController extends Controller
 
         $newUser = new User();
 
-        $authUser = auth()->user();
+        $newUser->name = $request->name;
+        $newUser->email = $request->email;
+        $newUser->password = Hash::make($request->password);
+        $newUser->isAdmin = false;
 
-        if ($authUser) {
-            $newUser->name = $request->name;
-            $newUser->email = $request->email;
-            $newUser->password = Hash::make($request->password);
-            $newUser->isAdmin = false;
+        $newUser->save();
 
-            $newUser->save();
-
-            return response()->json([
-                'status' => 1,
-                'msg' => 'User created',
-                'data' => $newUser
-            ], 200);
-        }
+        return response()->json([
+            'status' => 1,
+            'msg' => 'User created',
+            'data' => $newUser
+        ], 200);
     }
 
-    // postman 
+    // refactor
     public function login(Request $request)
     {
         $request->validate([
@@ -72,46 +69,31 @@ class UserController extends Controller
         ], 404);
     }
 
-    // postman and middleware
+    // refactor
     public function getUsers()
     {
         $users = User::all();
-        $user = auth()->user();
-
-        if ($user) {
-            return response()->json([
-                'status' => 1,
-                'msg' => 'This is the list of users',
-                'data' => $users
-            ], 200);
-        }
 
         return response()->json([
-            'status' => 0,
-            'msg' => 'You are not logged in',
-        ], 401);
+            'status' => 1,
+            'msg' => 'This is the list of users',
+            'data' => $users
+        ], 200);
     }
 
-    // postman and middleware
-    public function userProfile()
+    // refactor
+    public function userProfile($id)
     {
-        $user = auth()->user();
-
-        if ($user) {
-            return response()->json([
-                "status" => 1,
-                "msg" => "This is the user profile",
-                "data" => $user
-            ], 200);
-        }
+        $user = User::findOrFail($id);
 
         return response()->json([
-            "status" => 0,
-            "msg" => "There are no users authenticated"
-        ], 401);
+            "status" => 1,
+            "msg" => "This is the user profile",
+            "data" => $user
+        ], 200);
     }
 
-    // postman
+    // refactor
     public function logout()
     {
         $user = auth()->user();
@@ -125,22 +107,20 @@ class UserController extends Controller
         ], 200);
     }
 
-    // postman and middleware
+    // refactor
     public function delete($id)
     {
         $user = User::findOrFail($id);
 
-        if (auth()->user()) {
-            $user->delete();
+        $user->delete();
 
-            return response()->json([
-                "status" => 1,
-                "msg" => "User successfully deleted"
-            ], 200);
-        }
+        return response()->json([
+            "status" => 1,
+            "msg" => "User successfully deleted"
+        ], 200);
     }
 
-    // postman and middleware
+    // refactor
     public function update(Request $request, $id)
     {
         /*   $request->validate([
@@ -151,18 +131,27 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        if (auth()->user()) {
+        $currentUser = auth()->user();
+
+        if($currentUser->id != $user->id) {
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
-
+    
             $user->save();
+
+           /*  $currentUser->tokens()->delete(); */
 
             return response()->json([
                 'status' => 1,
-                'msg' => 'User updated',
+                'msg' => 'User updated and you have logged out',
                 'data' => $user
             ], 200);
         }
+
+        return response()->json([
+            'status' => 0,
+            'msg' => 'You cannot update yourself',
+        ]);
     }
 }

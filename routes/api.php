@@ -23,10 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/register', [UserController::class, 'register'])->middleware('isadmin', 'auth');
-    Route::get('/users', [UserController::class, 'getUsers'])->name('users')->middleware('isadmin', 'auth');
-    Route::get('/userprofile', [UserController::class, 'userProfile'])->middleware('isadmin', 'auth');
+    Route::post('/register', [UserController::class, 'register'])->middleware('isadmin');
+    Route::get('/users', [UserController::class, 'getUsers'])->name('users')->middleware('isadmin');
+    Route::get('/userprofile/{id}', [UserController::class, 'userProfile'])->middleware('isadmin');
     Route::get('/logout', [UserController::class, 'logout']);
-    Route::patch('/update/{id}', [UserController::class, 'update'])->name('update')->middleware('isadmin', 'auth');
-    Route::delete('/delete/{id}', [UserController::class, 'delete'])->middleware('isadmin', 'auth');
+    Route::patch('/update/{id}', [UserController::class, 'update'])->name('update')->middleware('isadmin');
+    Route::delete('/delete/{id}', [UserController::class, 'delete'])->middleware('isadmin');
 });

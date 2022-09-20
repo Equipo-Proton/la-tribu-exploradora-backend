@@ -62,7 +62,7 @@ class UserTest extends TestCase
     
         $this->actingAs($user);
 
-        $response = $this->get('/api');
+        $response = $this->get('/api/users');
         $response->assertStatus(401);
     }
 

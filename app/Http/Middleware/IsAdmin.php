@@ -23,7 +23,7 @@ class IsAdmin
         
         return response()->json([
             'status' => 0,
-            'msg' => 'You are not admin'
+            'msg' => 'You are not teacher'
         ], 401);
     }
 }
