@@ -37,7 +37,8 @@ class TeacherController extends Controller
     public function listTeachers()
     {
         $teachers = User::all()
-            ->where('isAdmin', '=', 1);
+        ->where('isAdmin', '=', 1)
+        ->where('superAdmin', '=', 0);
 
         return response()->json([
             'status' => 1,
@@ -49,6 +50,7 @@ class TeacherController extends Controller
     public function teacherProfile($id)
     {
         $teacher = User::where('isAdmin', '=', 1)
+            ->where('superAdmin', '=', 0)
             ->findOrFail($id);
 
         return response()->json([
@@ -60,7 +62,9 @@ class TeacherController extends Controller
 
     public function deleteTeacher($id)
     {
-        $teacher = User::findOrFail($id);
+        $teacher = User::where('isAdmin', '=', 1)
+            ->where('superAdmin', '=', 0)
+            ->findOrFail($id);
 
         $teacher->delete();
 

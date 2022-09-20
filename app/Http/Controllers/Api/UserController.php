@@ -72,7 +72,9 @@ class UserController extends Controller
     // refactor and test
     public function getUsers()
     {
-        $users = User::all();
+        $users = User::all()
+            ->where('isAdmin', '=', 0)
+            ->where('superAdmin', '=', 0);
 
         return response()->json([
             'status' => 1,
@@ -84,8 +86,9 @@ class UserController extends Controller
     // refactor
     public function userProfile($id)
     {
-        $user = User::findOrFail($id);
-
+        $user = User::where('isAdmin', '=', 0)
+            ->where('superAdmin', '=', 0)
+            ->findOrFail($id);
         return response()->json([
             "status" => 1,
             "msg" => "This is the user profile",

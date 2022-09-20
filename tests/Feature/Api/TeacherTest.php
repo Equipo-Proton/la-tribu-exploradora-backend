@@ -17,7 +17,7 @@ class TeacherTest extends TestCase
      */
     use RefreshDatabase;
 
-    // register tests
+    // register 
     public function test_director_no_auth_can_not_register() {
         $this->withoutExceptionHandling();
 
@@ -76,7 +76,7 @@ class TeacherTest extends TestCase
         ], $params));
     }
 
-     // teachers list tests
+     // teacher list 
      public function test_user_no_auth_can_not_see_teachers_list()
      {
          $this->withoutExceptionHandling();
@@ -131,7 +131,7 @@ class TeacherTest extends TestCase
          $this->assertCount(1, User::all()->where('isAdmin', '=', true));
      } 
 
-    // user profile tests
+    // user profile 
     public function test_user_no_auth_can_not_see_teacher_profile()
     {
         $this->withoutExceptionHandling();
@@ -186,4 +186,50 @@ class TeacherTest extends TestCase
         $response = $this->get('/api/teacherprofile/1');        
         $response->assertStatus(200);
     } 
+
+    // delete
+    public function test_delete_teacher_no_auth_user() {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+    
+        $this->actingAs($user);
+
+        $response = $this->delete(route('deleteTeacher', $user->id));
+        $response->assertStatus(401);
+    }
+
+    public function test_delete_teacher__auth_user_no_director() {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create([
+            'isAdmin' => true
+        ]);
+
+        Sanctum::actingAs(
+            $userNoTeacher = User::factory()->create([
+                   'superAdmin' => false
+            ])
+        ); 
+
+        $response = $this->delete(route('deleteTeacher', $user->id));
+        $response->assertStatus(401);
+    }
+
+    public function test_delete_user__auth_user_teacher() {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create([
+            'isAdmin' => true
+        ]);
+
+        Sanctum::actingAs(
+            $userTeacher = User::factory()->create([
+                   'superAdmin' => true
+            ])
+        ); 
+
+        $response = $this->delete(route('deleteTeacher', $user->id));
+        $response->assertStatus(200);
+    }
 }
