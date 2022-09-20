@@ -48,11 +48,12 @@ class TeacherController extends Controller
 
     public function teacherProfile($id)
     {
-        $teacher = User::findOrFail($id);
+        $teacher = User::where('isAdmin', '=', 1)
+            ->findOrFail($id);
 
         return response()->json([
             "status" => 1,
-            "msg" => "This is the user profile",
+            "msg" => "This is the teacher profile",
             "data" => $teacher
         ], 200);
     }
