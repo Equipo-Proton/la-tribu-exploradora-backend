@@ -77,13 +77,16 @@ class UserTest extends TestCase
         $this->withoutExceptionHandling();
 
         $user = User::factory()->create();
-    
-        $this->actingAs($user);
 
-        $response = $this->get('/api/userprofile/1');
+        $currentUser = User::factory()->create();
+    
+        $this->actingAs($currentUser);
+
+        $response = $this->get(route('userProfile', $user->id));
         $response->assertStatus(401);
     }
 
+    // hay que mejorar este :)
     public function test_if_auth_user_no_teacher_can_not_see_user_profile()
     {
         $this->withExceptionHandling();
@@ -101,6 +104,7 @@ class UserTest extends TestCase
         $response->assertStatus(401);
     }
 
+    // y este :)
     public function test_if_auth_user_teacher_can_see_user_profile()
     {
         $this->withExceptionHandling();

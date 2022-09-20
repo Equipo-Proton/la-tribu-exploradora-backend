@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     // i am the teacher and i can do this
-    // refactor
+    // refactor and test
     public function register(Request $request)
     {
         $request->validate([
@@ -69,7 +69,7 @@ class UserController extends Controller
         ], 404);
     }
 
-    // refactor
+    // refactor and test
     public function getUsers()
     {
         $users = User::all();
