@@ -82,6 +82,10 @@ class UserController extends Controller
             ], 200);
         }
 
+        return response()->json([
+            'status' => 0,
+            'msg' => 'You are not logged in',
+        ], 401);
     }
 
     public function userProfile()
