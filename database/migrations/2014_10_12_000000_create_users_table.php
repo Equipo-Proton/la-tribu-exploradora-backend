@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('isAdmin')->default(false);
+            $table->boolean('superAdmin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
