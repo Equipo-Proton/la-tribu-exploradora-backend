@@ -19,42 +19,45 @@ class UserTest extends TestCase
      */
 
     use RefreshDatabase;
-    public function test_if_auth_user_can_see_users_list()
+    
+    public function test_if_auth_user_no_teacher_can_not_see_users_list()
     {
         $this->withExceptionHandling();
 
         User::factory()->create();
 
-       /*  Sanctum::actingAs(
+        Sanctum::actingAs(
             $user = User::factory()->create([
-                    'name' => 'Pedro',
-                    'email' => 'pedro@mail.com',
-                    'password' => 12345
+                   'isAdmin' => false
             ])
-        ); */
+        ); 
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
 
         $response = $this->get('/api/users');        
-        $response->assertStatus(200);
+        $response->assertStatus(401);
     } 
 
-   /*  public function test_if_auth_user_can_see_users_list_optional()
+    public function test_if_auth_user_teacher_can_see_users_list()
     {
-        $this->withoutExceptionHandling();
+        $this->withExceptionHandling();
 
         User::factory()->create();
 
         Sanctum::actingAs(
-            $user = User::factory()->create()
-        );
-    
-        $response = $this->get('/api');        
-        $response->assertStatus(200);
-    }  */
+            $user = User::factory()->create([
+                   'isAdmin' => true
+            ])
+        ); 
 
-    public function test_user_can_not_see_users_list()
+        $users = User::all();
+
+        $response = $this->get('/api/users');        
+        $response->assertStatus(200);
+            
+    } 
+
+
+    public function test_user_no_auth_can_not_see_users_list()
     {
         $this->withoutExceptionHandling();
 
@@ -66,7 +69,7 @@ class UserTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_user_profile_can_be_updated_by_auth_user()
+    /* public function test_user_profile_can_be_updated_by_auth_user()
     {
         $this->withoutExceptionHandling();
 
@@ -86,5 +89,5 @@ class UserTest extends TestCase
         $this->assertEquals(User::first()->name,'Update Name');
 
     } 
-
+ */
 }
