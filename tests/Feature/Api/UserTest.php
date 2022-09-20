@@ -100,7 +100,7 @@ class UserTest extends TestCase
         ); 
 
 
-        $response = $this->get('/api/userprofile/1');        
+        $response = $this->get(route('userProfile', $user->id));   
         $response->assertStatus(401);
     }
 
@@ -119,7 +119,7 @@ class UserTest extends TestCase
 
         $users = User::all();
 
-        $response = $this->get('/api/userprofile/1');        
+        $response = $this->get(route('userProfile', $user->id));        
         $response->assertStatus(200);
     } 
     
