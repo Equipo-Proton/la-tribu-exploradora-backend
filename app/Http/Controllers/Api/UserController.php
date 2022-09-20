@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    // postman
     public function register(Request $request)
     {
         $request->validate([
@@ -17,25 +18,27 @@ class UserController extends Controller
             'password' => 'required|confirmed'
         ]);
 
-        $user = new User();
-        $user = auth()->user();
+        $newUser = new User();
+        $authUser = auth()->user();
 
-        if($user) {
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-    
-            $user->save();
+        if($authUser) {
+            $newUser->name = $request->name;
+            $newUser->email = $request->email;
+            $newUser->password = Hash::make($request->password);
+            $newUser->isAdmin = false;
+
+            $newUser->save();
     
             return response()->json([
                 'status' => 1,
                 'msg' => 'User created',
-                'data' => $user
+                'data' => $newUser
             ], 200);
         }
        
     }
 
+    // postman
     public function login(Request $request)
     {
         $request->validate([
@@ -69,6 +72,7 @@ class UserController extends Controller
         ], 404);
     }
 
+     // postman
     public function getUsers()
     {
         $users = User::all();
@@ -106,6 +110,7 @@ class UserController extends Controller
         ], 401);
     }
 
+     // postman
     public function logout()
     {
         $user = auth()->user();
