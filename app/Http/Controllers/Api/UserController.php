@@ -136,11 +136,11 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+      /*   $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required|confirmed'
-        ]);
+        ]); */
 
         $user = User::findOrFail($id);
 
@@ -149,7 +149,7 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
     
-            $user->update();
+            $user->save();
     
             return response()->json([
                 'status' => 1,

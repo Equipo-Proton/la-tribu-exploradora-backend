@@ -24,10 +24,10 @@ Route::post('/login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/register', [UserController::class, 'register']);
-    Route::get('/', [UserController::class, 'getUsers']);
+    Route::get('/users', [UserController::class, 'getUsers'])->name('users');
     Route::get('/userprofile', [UserController::class, 'userProfile']);
     Route::get('/logout', [UserController::class, 'logout']);
-    Route::post('/update/{id}', [UserController::class, 'update']);
+    Route::patch('/update/{id}', [UserController::class, 'update'])->name('update');
     Route::delete('/delete/{id}', [UserController::class, 'delete']);
 
 });

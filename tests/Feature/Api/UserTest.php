@@ -25,19 +25,22 @@ class UserTest extends TestCase
 
         User::factory()->create();
 
-        Sanctum::actingAs(
+       /*  Sanctum::actingAs(
             $user = User::factory()->create([
                     'name' => 'Pedro',
                     'email' => 'pedro@mail.com',
                     'password' => 12345
             ])
-        );
+        ); */
 
-        $response = $this->get('/api');        
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->get('/api/users');        
         $response->assertStatus(200);
     } 
 
-    public function test_if_auth_user_can_see_users_list_optional()
+   /*  public function test_if_auth_user_can_see_users_list_optional()
     {
         $this->withoutExceptionHandling();
 
@@ -49,7 +52,7 @@ class UserTest extends TestCase
     
         $response = $this->get('/api');        
         $response->assertStatus(200);
-    } 
+    }  */
 
     public function test_user_can_not_see_users_list()
     {
@@ -70,20 +73,14 @@ class UserTest extends TestCase
         $user = User::factory()->create();
         $authUser = User::factory()->create();
 
-        $this->actingAs($admin);
+        $this->actingAs($authUser);
     
         $this->assertCount(2, User::all());
 
-        $response = $this->patch(route('updateUsers', $user->id), [
-            'name'=> 'Update Name',
-        ]);
-    
-        $this->assertEquals(User::first()->name,'Update Name');
-
-        $this->actingAs($user);
-
-        $response = $this->patch(route('updateUsers', $user->id), [
-            'name'=> 'Update Name by user',
+        $response = $this->patch(route('update', $user->id), [
+            'name' => 'Update Name',
+            'email' => 'user@gmail.com',
+            'password' => 'password'
         ]);
     
         $this->assertEquals(User::first()->name,'Update Name');
