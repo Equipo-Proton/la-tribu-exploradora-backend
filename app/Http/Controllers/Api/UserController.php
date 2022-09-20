@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // postman
+    // postman and middleware
     public function register(Request $request)
     {
         $request->validate([
@@ -19,26 +19,26 @@ class UserController extends Controller
         ]);
 
         $newUser = new User();
+
         $authUser = auth()->user();
 
-        if($authUser) {
+        if ($authUser) {
             $newUser->name = $request->name;
             $newUser->email = $request->email;
             $newUser->password = Hash::make($request->password);
             $newUser->isAdmin = false;
 
             $newUser->save();
-    
+
             return response()->json([
                 'status' => 1,
                 'msg' => 'User created',
                 'data' => $newUser
             ], 200);
         }
-       
     }
 
-    // postman
+    // postman 
     public function login(Request $request)
     {
         $request->validate([
@@ -72,13 +72,13 @@ class UserController extends Controller
         ], 404);
     }
 
-     // postman
+    // postman and middleware
     public function getUsers()
     {
         $users = User::all();
         $user = auth()->user();
 
-        if($user) {
+        if ($user) {
             return response()->json([
                 'status' => 1,
                 'msg' => 'This is the list of users',
@@ -92,6 +92,7 @@ class UserController extends Controller
         ], 401);
     }
 
+    // postman and middleware
     public function userProfile()
     {
         $user = auth()->user();
@@ -110,7 +111,7 @@ class UserController extends Controller
         ], 401);
     }
 
-     // postman
+    // postman
     public function logout()
     {
         $user = auth()->user();
@@ -124,24 +125,25 @@ class UserController extends Controller
         ], 200);
     }
 
+    // postman and middleware
     public function delete($id)
     {
         $user = User::findOrFail($id);
 
-        if(auth()->user()){
+        if (auth()->user()) {
             $user->delete();
 
             return response()->json([
                 "status" => 1,
                 "msg" => "User successfully deleted"
-            ],200);
+            ], 200);
         }
-        
     }
 
+    // postman and middleware
     public function update(Request $request, $id)
     {
-      /*   $request->validate([
+        /*   $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed'
@@ -149,13 +151,13 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        if(auth()->user()) {
+        if (auth()->user()) {
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
-    
+
             $user->save();
-    
+
             return response()->json([
                 'status' => 1,
                 'msg' => 'User updated',
