@@ -72,6 +72,54 @@ class UserTest extends TestCase
     } 
 
     // user profile
+    public function test_user_no_auth_can_not_see_user_profile()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+    
+        $this->actingAs($user);
+
+        $response = $this->get('/api/userprofile/1');
+        $response->assertStatus(401);
+    }
+
+    public function test_if_auth_user_no_teacher_can_not_see_user_profile()
+    {
+        $this->withExceptionHandling();
+
+        User::factory()->create();
+
+        Sanctum::actingAs(
+            $user = User::factory()->create([
+                   'isAdmin' => false
+            ])
+        ); 
+
+
+        $response = $this->get('/api/userprofile/1');        
+        $response->assertStatus(401);
+    }
+
+    public function test_if_auth_user_teacher_can_see_user_profile()
+    {
+        $this->withExceptionHandling();
+
+        User::factory()->create();
+
+        Sanctum::actingAs(
+            $user = User::factory()->create([
+                   'isAdmin' => true
+            ])
+        ); 
+
+        $users = User::all();
+
+        $response = $this->get('/api/userprofile/1');        
+        $response->assertStatus(200);
+    } 
+    
+
 
 
 
@@ -141,12 +189,21 @@ class UserTest extends TestCase
     }
 
     //login
-
-
-
-
-
+    
     //logout
+
+    public function test_user_can_logout()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+    
+        $this->actingAs($user);
+
+        $response = $this->get('/api/logout');
+        $response->assertStatus(200);
+    }
+
 
 
 
