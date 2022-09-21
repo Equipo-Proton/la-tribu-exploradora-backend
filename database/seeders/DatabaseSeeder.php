@@ -37,17 +37,20 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Miguel',
-            'email' => 'miguel@gmail.com'
+            'email' => 'miguel@gmail.com',
+            'teacher' => 'kerim@gmail.com'
         ]);
 
         User::factory()->create([
             'name' => 'Luis',
-            'email' => 'luis@gmail.com'
+            'email' => 'luis@gmail.com',
+            'teacher' => 'kerim@gmail.com'
         ]);
 
         User::factory()->create([
-            'name' => 'Roberto',
-            'email' => 'roberto@gmail.com'
+            'name' => 'Juan',
+            'email' => 'juan@gmail.com',
+            'teacher' => 'ibai@gmail.com'
         ]);
     }
 }

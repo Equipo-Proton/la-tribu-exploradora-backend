@@ -20,11 +20,13 @@ class UserController extends Controller
         ]);
 
         $newUser = new User();
+        $teacher = auth()->user();
 
         $newUser->name = $request->name;
         $newUser->email = $request->email;
         $newUser->password = Hash::make($request->password);
         $newUser->isAdmin = false;
+        $newUser->teacher = $teacher->email;
 
         $newUser->save();
 
@@ -72,9 +74,12 @@ class UserController extends Controller
     // refactor and test
     public function getUsers()
     {
+        $teacher = auth()->user();
+
         $users = User::all()
             ->where('isAdmin', '=', 0)
-            ->where('superAdmin', '=', 0);
+            ->where('superAdmin', '=', 0)
+            ->where('teacher', '=', $teacher->email);
 
         return response()->json([
             'status' => 1,
@@ -86,9 +91,13 @@ class UserController extends Controller
     // refactor
     public function userProfile($id)
     {
+        $teacher = auth()->user();
+
         $user = User::where('isAdmin', '=', 0)
             ->where('superAdmin', '=', 0)
+            ->where('teacher', '=', $teacher->email)
             ->findOrFail($id);
+            
         return response()->json([
             "status" => 1,
             "msg" => "This is the user profile",
