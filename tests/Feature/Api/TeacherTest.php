@@ -17,7 +17,7 @@ class TeacherTest extends TestCase
      */
     use RefreshDatabase;
 
-    // register 
+    // register tests passed
     public function test_director_no_auth_can_not_register() {
         $this->withoutExceptionHandling();
 
@@ -76,7 +76,7 @@ class TeacherTest extends TestCase
         ], $params));
     }
 
-     // teacher list 
+     // teacher list tests passed
      public function test_user_no_auth_can_not_see_teachers_list()
      {
          $this->withoutExceptionHandling();
@@ -131,7 +131,7 @@ class TeacherTest extends TestCase
          $this->assertCount(1, User::all()->where('isAdmin', '=', true));
      } 
 
-    // user profile 
+    // user profile tests passed
     public function test_user_no_auth_can_not_see_teacher_profile()
     {
         $this->withoutExceptionHandling();
@@ -187,7 +187,7 @@ class TeacherTest extends TestCase
         $response->assertStatus(200);
     } 
 
-    // delete
+    // delete tests passed
     public function test_delete_teacher_no_auth_user() {
         $this->withoutExceptionHandling();
 
@@ -234,5 +234,18 @@ class TeacherTest extends TestCase
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
     // falta test update profesor
 }

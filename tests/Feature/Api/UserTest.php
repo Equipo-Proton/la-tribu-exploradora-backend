@@ -23,12 +23,13 @@ class UserTest extends TestCase
 
     use RefreshDatabase;
 
-    // register
-    public function test_user_no_auth_can_not_register() {
+    // register tests passed
+    public function test_user_no_auth_can_not_register()
+    {
         $this->withoutExceptionHandling();
 
         $user = User::factory()->create();
-    
+
         $this->actingAs($user);
 
         $response = $this->attemptToRegister();
@@ -44,9 +45,9 @@ class UserTest extends TestCase
 
         Sanctum::actingAs(
             $authUser = User::factory()->create([
-                   'isAdmin' => false
+                'isAdmin' => false
             ])
-        ); 
+        );
 
         $response = $this->attemptToRegister();
 
@@ -61,9 +62,9 @@ class UserTest extends TestCase
 
         Sanctum::actingAs(
             $authUser = User::factory()->create([
-                   'isAdmin' => true
+                'isAdmin' => true
             ])
-        ); 
+        );
 
         $response = $this->attemptToRegister();
 
@@ -83,16 +84,16 @@ class UserTest extends TestCase
         ], $params));
     }
 
-    // log in 
+    // log in tests passed
     public function test_users_can_authenticate()
     {
         $user = User::factory()->create();
 
-        $response = $this->postJson(route('login'),[
+        $response = $this->postJson(route('login'), [
             'email' => $user->email,
             'password' => 'password'
         ])
-        ->assertOk();
+            ->assertOk();
 
         $this->assertArrayHasKey('access_token', $response->json());
     }
@@ -101,7 +102,7 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->postJson(route('login'),[
+        $response = $this->postJson(route('login'), [
             'email' => $user->email,
             'password' => 'wrong-password'
         ]);
@@ -110,53 +111,56 @@ class UserTest extends TestCase
     }
 
     // log out test
-/*     public function test_user_can_logout()
+    public function test_user_can_logout()
     {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create();
+        Sanctum::actingAs(
+            $user = User::factory()->create([])
+        );
     
-        $this->actingAs($user);
 
         $response = $this->get('/api/logout');
         $response->assertStatus(200);
     }
- */
 
-    // users list
+
+    // users list tests passed
     public function test_user_no_auth_can_not_see_users_list()
     {
         $this->withoutExceptionHandling();
 
         $user = User::factory()->create();
-    
+
         $this->actingAs($user);
 
         $response = $this->get('/api/users');
         $response->assertStatus(401);
     }
-    
+
     public function test_if_auth_user_no_teacher_can_not_see_users_list()
     {
         $this->withExceptionHandling();
 
         Sanctum::actingAs(
             $noTeacher = User::factory()->create([
-                   'isAdmin' => false
+                'email' => 'test@gmail.com',
+                'isAdmin' => false
             ])
-        ); 
+        );
 
         $this->actingAs($noTeacher);
         $user = User::factory()->create([
             'name' => 'John',
             'email' => 'john@gmail.com',
             'password' => 'password',
-            'password_confirmation' => 'password'
+            'teacher' => $noTeacher->email
         ]);
 
-        $response = $this->get('/api/users');        
+        $response = $this->get('/api/users');
         $response->assertStatus(401);
-    } 
+        $this->assertEquals($user->teacher, 'test@gmail.com');
+    }
 
     public function test_if_auth_user_teacher_can_see_users_list()
     {
@@ -164,22 +168,24 @@ class UserTest extends TestCase
 
         Sanctum::actingAs(
             $teacher = User::factory()->create([
-                   'isAdmin' => true
+                'email' => 'test@gmail.com',
+                'isAdmin' => true
             ])
-        ); 
+        );
 
         $user = User::factory()->create([
             'name' => 'John',
             'email' => 'john@gmail.com',
-            'password' => 'password'
+           'teacher' => $teacher->email
         ]);
 
-        $response = $this->get('/api/users');        
+        $response = $this->get('/api/users');
         $response->assertStatus(200);
         $this->assertEquals($user->email, 'john@gmail.com');
-    } 
+        $this->assertEquals($user->teacher, 'test@gmail.com');
+    }
 
-    // user profile
+    // user profile tests passed
     public function test_user_no_auth_can_not_see_user_profile()
     {
         $this->withoutExceptionHandling();
@@ -187,7 +193,7 @@ class UserTest extends TestCase
         $user = User::factory()->create();
 
         $currentUser = User::factory()->create();
-    
+
         $this->actingAs($currentUser);
 
         $response = $this->get(route('userProfile', $user->id));
@@ -202,11 +208,11 @@ class UserTest extends TestCase
 
         Sanctum::actingAs(
             $user = User::factory()->create([
-                   'isAdmin' => false
+                'isAdmin' => false
             ])
-        ); 
+        );
 
-        $response = $this->get(route('userProfile', $user->id));   
+        $response = $this->get(route('userProfile', $user->id));
         $response->assertStatus(401);
     }
 
@@ -214,87 +220,117 @@ class UserTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        $user = User::factory()->create();
+      
 
         Sanctum::actingAs(
             $userTeacher = User::factory()->create([
-                   'isAdmin' => true
+                'email' => 'test@gmail.com',
+                'isAdmin' => true
             ])
-        ); 
+        );
+        $user = User::factory()->create([
+            'teacher' => $userTeacher->email,
+        ]);
 
-        $response = $this->get(route('userProfile', $user->id));        
+        $response = $this->get(route('userProfile', $user->id));
         $response->assertStatus(200);
         $this->assertCount(1, User::all()
             ->where('isAdmin', '=', false)
-            ->where('superAdmin', '=', false));
-    } 
+            ->where('superAdmin', '=', false)
+            ->where('teacher', '=', $userTeacher->email));
+    }
 
-    // delete user tests
-    public function test_delete_user_no_auth_user() {
+    // delete user tests passed
+    public function test_delete_user_no_auth_user()
+    {
         $this->withoutExceptionHandling();
 
         $user = User::factory()->create();
-    
+
         $this->actingAs($user);
 
         $response = $this->delete(route('deleteUser', $user->id));
         $response->assertStatus(401);
     }
 
-    public function test_delete_user__auth_user_no_teacher() {
+    public function test_delete_user__auth_user_no_teacher()
+    {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create();
+       
 
         Sanctum::actingAs(
             $userNoTeacher = User::factory()->create([
-                   'isAdmin' => false
+                'email' => 'test@gmail.com',
+                'isAdmin' => false
             ])
-        ); 
+        );
+        $user = User::factory()->create([
+            'teacher' => $userNoTeacher->email
+        ]);
 
         $response = $this->delete(route('deleteUser', $user->id));
         $response->assertStatus(401);
     }
 
-    public function test_delete_user__auth_user_teacher() {
+    public function test_delete_user__auth_user_teacher()
+    {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create();
+       
 
         Sanctum::actingAs(
             $userTeacher = User::factory()->create([
-                   'isAdmin' => true
+                'email' => 'test@gmail.com',
+                'isAdmin' => true
             ])
-        ); 
+        );
+        $user = User::factory()->create([
+            'teacher' => $userTeacher->email
+        ]);
 
         $response = $this->delete(route('deleteUser', $user->id));
         $response->assertStatus(200);
     }
 
 
-   
 
 
 
-    /* public function test_user_profile_can_be_updated_by_auth_user()
+
+
+
+
+
+
+
+
+
+    
+
+   /*  public function test_user_profile_can_be_updated_by_auth_user()
     {
         $this->withoutExceptionHandling();
 
+       
         $user = User::factory()->create();
-        $authUser = User::factory()->create();
-
-        $this->actingAs($authUser);
+        Sanctum::actingAs(
+            $userTeacher = User::factory()->create([
+                'email' => 'test@gmail.com',
+                'isAdmin' => true
+            ])
+        );
+       
     
-        $this->assertCount(2, User::all());
+       $this->assertCount(2, User::all());
 
         $response = $this->patch(route('update', $user->id), [
             'name' => 'Update Name',
             'email' => 'user@gmail.com',
             'password' => 'password'
         ]);
-    
-        $this->assertEquals(User::first()->name,'Update Name');
+        $response->assertStatus(200);
+        $this->assertEquals($user->name, 'Upadte Name');
+    }  */
 
-    } 
- */
 }
