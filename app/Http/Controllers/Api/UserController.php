@@ -151,7 +151,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
     
-        $user->save();
+        $user->update();
 
         return response()->json([
             'status' => 1,

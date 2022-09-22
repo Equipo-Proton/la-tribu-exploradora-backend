@@ -74,37 +74,22 @@ class TeacherController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, $id)
+    public function updateTeacher(Request $request, $id)
     {
-        /*   $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]); */
+        $user = User::where('isAdmin', '=', 1)
+            ->where('superAdmin', '=', 0)
+            ->findOrFail($id);
 
-        $teacher = User::findOrFail($id);
-
-        $currentDirector = auth()->user();
-
-        if($currentDirector->id != $teacher->id) {
-            $teacher->name = $request->name;
-            $teacher->email = $request->email;
-            $teacher->password = Hash::make($request->password);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
     
-            $teacher->save();
-
-           /*  $currentUser->tokens()->delete(); */
-
-            return response()->json([
-                'status' => 1,
-                'msg' => 'Teacher updated and you have logged out',
-                'data' => $teacher
-            ], 200);
-        }
+        $user->update();
 
         return response()->json([
-            'status' => 0,
-            'msg' => 'You cannot update yourself',
-        ]);
+            'status' => 1,
+            'msg' => 'Teacher updated and you have logged out',
+            'data' => $user
+        ], 200);
     }
 }

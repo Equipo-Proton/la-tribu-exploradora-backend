@@ -140,14 +140,19 @@ class UserTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        User::factory()->create();
-
         Sanctum::actingAs(
-            $user = User::factory()->create([
+            $noTeacher = User::factory()->create([
                    'isAdmin' => false
             ])
         ); 
 
+        $this->actingAs($noTeacher);
+        $user = User::factory()->create([
+            'name' => 'John',
+            'email' => 'john@gmail.com',
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ]);
 
         $response = $this->get('/api/users');        
         $response->assertStatus(401);
@@ -157,18 +162,21 @@ class UserTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        User::factory()->create();
-
         Sanctum::actingAs(
-            $user = User::factory()->create([
+            $teacher = User::factory()->create([
                    'isAdmin' => true
             ])
         ); 
 
-        $users = User::all();
+        $user = User::factory()->create([
+            'name' => 'John',
+            'email' => 'john@gmail.com',
+            'password' => 'password'
+        ]);
 
         $response = $this->get('/api/users');        
         $response->assertStatus(200);
+        $this->assertEquals($user->email, 'john@gmail.com');
     } 
 
     // user profile

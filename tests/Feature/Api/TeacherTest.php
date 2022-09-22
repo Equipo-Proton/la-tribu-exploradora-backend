@@ -232,4 +232,7 @@ class TeacherTest extends TestCase
         $response = $this->delete(route('deleteTeacher', $user->id));
         $response->assertStatus(200);
     }
+
+
+    // falta test update profesor
 }
