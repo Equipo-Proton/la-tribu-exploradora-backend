@@ -36,6 +36,12 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
+            'name' => 'Carla',
+            'email' => 'carla@gmail.com',
+            'isAdmin' => true
+        ]);
+
+        User::factory()->create([
             'name' => 'Miguel',
             'email' => 'miguel@gmail.com',
             'teacher' => 'kerim@gmail.com'
@@ -50,7 +56,13 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Juan',
             'email' => 'juan@gmail.com',
-            'teacher' => 'ibai@gmail.com'
+            'teacher' => 'carla@gmail.com'
+        ]);
+
+        User::factory()->create([
+            'name' => 'Roberto',
+            'email' => 'roberto@gmail.com',
+            'teacher' => 'carla@gmail.com'
         ]);
     }
 }

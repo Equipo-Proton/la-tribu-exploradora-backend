@@ -122,7 +122,12 @@ class UserController extends Controller
     // refactor
     public function delete($id)
     {
-        $user = User::findOrFail($id);
+        $teacher = auth()->user();
+
+        $user = User::where('isAdmin', '=', 0)
+            ->where('superAdmin', '=', 0)
+            ->where('teacher', '=', $teacher->email)
+            ->findOrFail($id);
 
         $user->delete();
 
@@ -135,35 +140,23 @@ class UserController extends Controller
     // refactor
     public function update(Request $request, $id)
     {
-        /*   $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]); */
+        $teacher = auth()->user();
 
-        $user = User::findOrFail($id);
+        $user = User::where('isAdmin', '=', 0)
+            ->where('superAdmin', '=', 0)
+            ->where('teacher', '=', $teacher->email)
+            ->findOrFail($id);
 
-        $currentUser = auth()->user();
-
-        if($currentUser->id != $user->id) {
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
     
-            $user->save();
-
-           /*  $currentUser->tokens()->delete(); */
-
-            return response()->json([
-                'status' => 1,
-                'msg' => 'User updated and you have logged out',
-                'data' => $user
-            ], 200);
-        }
+        $user->save();
 
         return response()->json([
-            'status' => 0,
-            'msg' => 'You cannot update yourself',
-        ]);
+            'status' => 1,
+            'msg' => 'User updated and you have logged out',
+            'data' => $user
+        ], 200);
     }
 }
