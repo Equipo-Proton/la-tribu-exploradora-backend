@@ -293,8 +293,49 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /*  */
+    /*  
+    test cuando teacher crea un alumno el email de teacher coincide con el
+    login como teacher
+    crear usuario  siendo teacher
+    el campo de teacher sea igual a email de teacher 
 
+    */
+    public function test_when_teacher_create_student_in_teacher_column_appear_email_of_teacher() 
+    {
+
+        $this->withExceptionHandling();
+
+        $teacher = User::factory()->create();
+
+        Sanctum::actingAs(
+            $teacher = User::factory()->create([
+                'email' => 'myemail@gmail.com',
+                'isAdmin' => true
+            ])
+        );
+       
+        
+        $student = User::factory()->create([
+            'name' => 'Bea',
+            'email' => 'bea@gmail.com',
+            'isAdmin' => false,
+            'teacher' => $teacher->email
+        ]);
+
+        $this->assertEquals($student->teacher, 'myemail@gmail.com');
+
+     
+        /* 
+         
+    
+
+        
+
+        */
+        
+
+        
+    }
 
 
 
