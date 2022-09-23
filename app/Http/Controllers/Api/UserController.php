@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // i am the teacher and i can do this
-    // refactor and test
     public function register(Request $request)
     {
         $request->validate([
@@ -37,7 +35,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    // refactor
     public function login(Request $request)
     {
         $request->validate([
@@ -71,7 +68,6 @@ class UserController extends Controller
         ], 404);
     }
 
-    // refactor and test
     public function getUsers()
     {
         $teacher = auth()->user();
@@ -88,7 +84,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    // refactor
     public function userProfile($id)
     {
         $teacher = auth()->user();
@@ -105,7 +100,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    // refactor
     public function logout()
     {
         $user = auth()->user();
@@ -119,7 +113,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    // refactor
     public function delete($id)
     {
         $teacher = auth()->user();
@@ -137,7 +130,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    // refactor
     public function update(Request $request, $id)
     {
         $teacher = auth()->user();

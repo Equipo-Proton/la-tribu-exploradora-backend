@@ -110,7 +110,7 @@ class UserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    // log out test
+    // log out test passed
     public function test_user_can_logout()
     {
         $this->withoutExceptionHandling();
@@ -293,7 +293,7 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-
+    /*  */
 
 
 
@@ -308,7 +308,17 @@ class UserTest extends TestCase
 
     
 
-   /*  public function test_user_profile_can_be_updated_by_auth_user()
+   
+   
+   
+   
+   
+
+
+
+    
+   
+    /*  public function test_user_profile_can_be_updated_by_auth_user()
     {
         $this->withoutExceptionHandling();
 

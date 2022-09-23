@@ -247,5 +247,12 @@ class TeacherTest extends TestCase
 
 
     
-    // falta test update profesor
+
+
+
+
+
+
+
+    /*  */
 }

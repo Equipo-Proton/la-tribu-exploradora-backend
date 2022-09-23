@@ -21,8 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Ruta login sin middlewares
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
+// Rutas del profesor admin
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/register', [UserController::class, 'register'])->name('register')->middleware('isadmin');
     Route::get('/users', [UserController::class, 'getUsers'])->name('users')->middleware('isadmin');
@@ -32,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('deleteUser')->middleware('isadmin');
 });
 
+// Rutas del director superadmin
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/teacher/register', [TeacherController::class, 'teacherRegister'])->name('teacherRegister')->middleware('superadmin');
     Route::get('/teachers', [TeacherController::class, 'listTeachers'])->name('teachers')->middleware('superadmin');
