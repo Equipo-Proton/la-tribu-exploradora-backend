@@ -37,8 +37,8 @@ class TeacherController extends Controller
     public function listTeachers()
     {
         $teachers = User::all()
-        ->where('isAdmin', '=', 1)
-        ->where('superAdmin', '=', 0);
+            ->where('isAdmin', '=', 1)
+            ->where('superAdmin', '=', 0);
 
         return response()->json([
             'status' => 1,
@@ -47,17 +47,27 @@ class TeacherController extends Controller
         ], 200);
     }
 
-    public function teacherProfile($id)
+    public function listUsers()
     {
-        $teacher = User::where('isAdmin', '=', 1)
-            ->where('superAdmin', '=', 0)
+        $users = User::all()
+            ->where('superAdmin', '=', 0);
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'This is the list of all users',
+            'data' => $users
+        ], 200);
+    }
+
+    public function profile($id) {
+        $user = User::where('superAdmin', '=', 0)
             ->findOrFail($id);
 
         return response()->json([
-            "status" => 1,
-            "msg" => "This is the teacher profile",
-            "data" => $teacher
-        ], 200);
+            'status' => 1,
+            'msg' => 'This is the user',
+            'data' => $user
+        ]);
     }
 
     public function deleteTeacher($id)
@@ -83,7 +93,7 @@ class TeacherController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-    
+
         $user->update();
 
         return response()->json([

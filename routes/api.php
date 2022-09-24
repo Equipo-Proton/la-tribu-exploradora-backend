@@ -38,8 +38,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/teacher/register', [TeacherController::class, 'teacherRegister'])->name('teacherRegister')->middleware('superadmin');
     Route::get('/teachers', [TeacherController::class, 'listTeachers'])->name('teachers')->middleware('superadmin');
-    Route::get('/teacherprofile/{id}', [TeacherController::class, 'teacherProfile'])->name('teacherProfile')->middleware('superadmin');
+    Route::get('/profile/{id}', [TeacherController::class, 'profile'])->name('profile')->middleware('superadmin');
     Route::patch('/teacher/update/{id}', [TeacherController::class, 'updateTeacher'])->name('updateTeacher')->middleware('superadmin');
     Route::delete('/teacher/delete/{id}', [TeacherController::class, 'deleteTeacher'])->name('deleteTeacher')->middleware('superadmin');
+    Route::get('/listusers', [TeacherController::class, 'listUsers'])->middleware('superadmin');
 });
 
