@@ -44,25 +44,24 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Miguel',
             'email' => 'miguel@gmail.com',
-            'teacher' => 'kerim@gmail.com'
+            'teacher' => 2
         ]);
 
         User::factory()->create([
             'name' => 'Luis',
             'email' => 'luis@gmail.com',
-            'teacher' => 'kerim@gmail.com'
+            'teacher' => 2
         ]);
 
         User::factory()->create([
             'name' => 'Juan',
             'email' => 'juan@gmail.com',
-            'teacher' => 'carla@gmail.com'
+            'teacher' => 3
         ]);
 
         User::factory()->create([
             'name' => 'Roberto',
             'email' => 'roberto@gmail.com',
-            'teacher' => 'carla@gmail.com'
         ]);
     }
 }

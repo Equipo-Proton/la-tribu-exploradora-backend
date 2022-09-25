@@ -154,12 +154,12 @@ class UserTest extends TestCase
             'name' => 'John',
             'email' => 'john@gmail.com',
             'password' => 'password',
-            'teacher' => $noTeacher->email
+            'teacher' => $noTeacher->id
         ]);
 
         $response = $this->get('/api/users');
         $response->assertStatus(401);
-        $this->assertEquals($user->teacher, 'test@gmail.com');
+        $this->assertEquals($user->teacher, $noTeacher->id);
     }
 
     public function test_if_auth_user_teacher_can_see_users_list()
@@ -176,13 +176,12 @@ class UserTest extends TestCase
         $user = User::factory()->create([
             'name' => 'John',
             'email' => 'john@gmail.com',
-           'teacher' => $teacher->email
+           'teacher' => $teacher->id
         ]);
 
         $response = $this->get('/api/users');
         $response->assertStatus(200);
-        $this->assertEquals($user->email, 'john@gmail.com');
-        $this->assertEquals($user->teacher, 'test@gmail.com');
+        $this->assertEquals($user->teacher, $teacher->id);
     }
 
     // user profile tests passed
@@ -229,7 +228,7 @@ class UserTest extends TestCase
             ])
         );
         $user = User::factory()->create([
-            'teacher' => $userTeacher->email,
+            'teacher' => $userTeacher->id,
         ]);
 
         $response = $this->get(route('userProfile', $user->id));
@@ -237,7 +236,7 @@ class UserTest extends TestCase
         $this->assertCount(1, User::all()
             ->where('isAdmin', '=', false)
             ->where('superAdmin', '=', false)
-            ->where('teacher', '=', $userTeacher->email));
+            ->where('teacher', '=', $userTeacher->id));
     }
 
     // delete user tests passed
@@ -266,7 +265,7 @@ class UserTest extends TestCase
             ])
         );
         $user = User::factory()->create([
-            'teacher' => $userNoTeacher->email
+            'teacher' => $userNoTeacher->id
         ]);
 
         $response = $this->delete(route('deleteUser', $user->id));
@@ -286,7 +285,7 @@ class UserTest extends TestCase
             ])
         );
         $user = User::factory()->create([
-            'teacher' => $userTeacher->email
+            'teacher' => $userTeacher->id
         ]);
 
         $response = $this->delete(route('deleteUser', $user->id));
@@ -300,7 +299,7 @@ class UserTest extends TestCase
     el campo de teacher sea igual a email de teacher 
 
     */
-    public function test_when_teacher_create_student_in_teacher_column_appear_email_of_teacher() 
+   /*  public function test_when_teacher_create_student_in_teacher_column_appear_email_of_teacher() 
     {
 
         $this->withExceptionHandling();
@@ -324,7 +323,7 @@ class UserTest extends TestCase
 
         $this->assertEquals($student->teacher, 'myemail@gmail.com');
 
-     
+      */
         /* 
          
     
@@ -384,4 +383,4 @@ class UserTest extends TestCase
         $this->assertEquals($user->name, 'Upadte Name');
     }  */
 
-}
+

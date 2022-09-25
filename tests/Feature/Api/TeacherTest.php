@@ -142,7 +142,7 @@ class TeacherTest extends TestCase
     
         $this->actingAs($currentUser);
 
-        $response = $this->get(route('teacherProfile', $user->id));
+        $response = $this->get(route('profile', $user->id));
         $response->assertStatus(401);
     }
 
@@ -150,7 +150,7 @@ class TeacherTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'isAdmin' => true
         ]);
 
@@ -161,7 +161,7 @@ class TeacherTest extends TestCase
         ); 
 
 
-        $response = $this->get('/api/teacherprofile/1');        
+        $response = $this->get(route('profile', $user->id));        
         $response->assertStatus(401);
     }
 
@@ -169,7 +169,7 @@ class TeacherTest extends TestCase
     {
         $this->withExceptionHandling();
 
-        User::factory()->create([
+        $teacher = User::factory()->create([
             'isAdmin' => true
         ]);
 
@@ -183,7 +183,7 @@ class TeacherTest extends TestCase
             ])
         ); 
 
-        $response = $this->get('/api/teacherprofile/1');        
+        $response = $this->get(route('profile', $teacher->id));        
         $response->assertStatus(200);
     } 
 

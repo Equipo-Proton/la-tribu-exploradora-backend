@@ -24,7 +24,7 @@ class UserController extends Controller
         $newUser->email = $request->email;
         $newUser->password = Hash::make($request->password);
         $newUser->isAdmin = false;
-        $newUser->teacher = $teacher->email;
+        $newUser->teacher = $teacher->id;
 
         $newUser->save();
 
@@ -75,7 +75,7 @@ class UserController extends Controller
         $users = User::all()
             ->where('isAdmin', '=', 0)
             ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->email);
+            ->where('teacher', '=', $teacher->id);
 
         return response()->json([
             'status' => 1,
@@ -90,7 +90,7 @@ class UserController extends Controller
 
         $user = User::where('isAdmin', '=', 0)
             ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->email)
+            ->where('teacher', '=', $teacher->id)
             ->findOrFail($id);
             
         return response()->json([
@@ -119,7 +119,7 @@ class UserController extends Controller
 
         $user = User::where('isAdmin', '=', 0)
             ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->email)
+            ->where('teacher', '=', $teacher->id)
             ->findOrFail($id);
 
         $user->delete();
@@ -136,7 +136,7 @@ class UserController extends Controller
 
         $user = User::where('isAdmin', '=', 0)
             ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->email)
+            ->where('teacher', '=', $teacher->id)
             ->findOrFail($id);
 
         $user->name = $request->name;
