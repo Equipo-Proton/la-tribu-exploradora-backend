@@ -118,7 +118,7 @@ class UserTest extends TestCase
         Sanctum::actingAs(
             $user = User::factory()->create([])
         );
-    
+
 
         $response = $this->get('/api/logout');
         $response->assertStatus(200);
@@ -176,7 +176,7 @@ class UserTest extends TestCase
         $user = User::factory()->create([
             'name' => 'John',
             'email' => 'john@gmail.com',
-           'teacher' => $teacher->id
+            'teacher' => $teacher->id
         ]);
 
         $response = $this->get('/api/users');
@@ -219,7 +219,7 @@ class UserTest extends TestCase
     {
         $this->withExceptionHandling();
 
-      
+
 
         Sanctum::actingAs(
             $userTeacher = User::factory()->create([
@@ -256,7 +256,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-       
+
 
         Sanctum::actingAs(
             $userNoTeacher = User::factory()->create([
@@ -276,7 +276,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-       
+
 
         Sanctum::actingAs(
             $userTeacher = User::factory()->create([
@@ -292,95 +292,25 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /*  
-    test cuando teacher crea un alumno el email de teacher coincide con el
-    login como teacher
-    crear usuario  siendo teacher
-    el campo de teacher sea igual a email de teacher 
 
-    */
-   /*  public function test_when_teacher_create_student_in_teacher_column_appear_email_of_teacher() 
+
+
+    public function test_when_teacher_create_student_in_teacher_column_appear_id()
     {
 
         $this->withExceptionHandling();
 
-        $teacher = User::factory()->create();
-
         Sanctum::actingAs(
             $teacher = User::factory()->create([
-                'email' => 'myemail@gmail.com',
                 'isAdmin' => true
             ])
         );
-       
-        
+
         $student = User::factory()->create([
-            'name' => 'Bea',
-            'email' => 'bea@gmail.com',
             'isAdmin' => false,
-            'teacher' => $teacher->email
+            'teacher' => $teacher->id
         ]);
 
-        $this->assertEquals($student->teacher, 'myemail@gmail.com');
-
-      */
-        /* 
-         
-    
-
-        
-
-        */
-        
-
-        
+        $response = $this->assertEquals($student->teacher, $teacher->id);
     }
-
-
-
-
-
-
-
-
-
-
-
-    
-
-   
-   
-   
-   
-   
-
-
-
-    
-   
-    /*  public function test_user_profile_can_be_updated_by_auth_user()
-    {
-        $this->withoutExceptionHandling();
-
-       
-        $user = User::factory()->create();
-        Sanctum::actingAs(
-            $userTeacher = User::factory()->create([
-                'email' => 'test@gmail.com',
-                'isAdmin' => true
-            ])
-        );
-       
-    
-       $this->assertCount(2, User::all());
-
-        $response = $this->patch(route('update', $user->id), [
-            'name' => 'Update Name',
-            'email' => 'user@gmail.com',
-            'password' => 'password'
-        ]);
-        $response->assertStatus(200);
-        $this->assertEquals($user->name, 'Upadte Name');
-    }  */
-
-
+}
