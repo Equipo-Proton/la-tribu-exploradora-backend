@@ -233,6 +233,32 @@ class TeacherTest extends TestCase
         $response->assertStatus(200);
     }
 
+    //prueba
+    public function test_admin_can_edit_teacher() 
+    {
+        $this->withExceptionHandling();
+
+        $teacher = User::factory()->create([
+            'superAdmin' => false,
+            'isAdmin' => true,
+            'name' => 'Josemi'
+        ]);
+
+        Sanctum::actingAs(
+            $adminApp = User::factory()->create([
+                'superAdmin' => true
+            ])
+        );
+        
+        $teacher->name = 'Carla';
+
+        $teacher->update();
+        
+        $response = $this->patch(route('updateTeacher', $teacher->id ));
+        
+        $this->assertEquals($teacher->name, 'Carla');
+    }   
+
 
 
 

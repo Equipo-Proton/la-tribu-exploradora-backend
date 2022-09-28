@@ -313,4 +313,28 @@ class UserTest extends TestCase
 
         $response = $this->assertEquals($student->teacher, $teacher->id);
     }
+    //prueba
+    public function test_teacher_can_edit_student() 
+    {
+        $this->withExceptionHandling();
+
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'name' => 'Mario'
+        ]);
+
+        Sanctum::actingAs(
+            $teacher = User::factory()->create([
+                'isAdmin' => true
+            ])
+        );
+        
+        $user->name = 'marta';
+
+        $user->update();
+        
+        $response = $this->patch(route('update', $user->id ));
+        
+        $this->assertEquals($user->name, 'marta');
+    }   
 }
