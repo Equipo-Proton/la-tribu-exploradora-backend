@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('isAdmin')->default(false);
             $table->boolean('superAdmin')->default(false);
             $table->integer('teacher')->references('id')->on('users')->nullable();
+            $table->string('showPassword');
             $table->rememberToken();
             $table->timestamps();
         });

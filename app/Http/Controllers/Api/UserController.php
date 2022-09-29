@@ -25,6 +25,7 @@ class UserController extends Controller
         $newUser->password = Hash::make($request->password);
         $newUser->isAdmin = false;
         $newUser->teacher = $teacher->id;
+        $newUser->showPassword = $request->password;
 
         $newUser->save();
 
@@ -142,7 +143,8 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-    
+        $user->showPassword = $request->password;
+
         $user->update();
 
         return response()->json([
