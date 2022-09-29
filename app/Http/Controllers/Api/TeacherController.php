@@ -24,6 +24,7 @@ class TeacherController extends Controller
         $newTeacher->password = Hash::make($request->password);
         $newTeacher->isAdmin = true;
         $newTeacher->superAdmin = false;
+        $newTeacher->showPassword = $request->password;
 
         $newTeacher->save();
 
