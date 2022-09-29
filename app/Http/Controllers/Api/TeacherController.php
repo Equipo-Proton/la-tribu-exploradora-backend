@@ -93,6 +93,7 @@ class TeacherController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->showPassword = $request->password;
 
         $user->update();
 
