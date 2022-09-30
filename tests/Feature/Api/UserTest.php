@@ -313,6 +313,7 @@ class UserTest extends TestCase
 
         $response = $this->assertEquals($student->teacher, $teacher->id);
     }
+<<<<<<< HEAD
     //prueba
     public function test_teacher_can_edit_student() 
     {
@@ -323,11 +324,19 @@ class UserTest extends TestCase
             'name' => 'Mario'
         ]);
 
+=======
+    
+    public function test_teacher_can_edit_student()
+    {
+        $this->withExceptionHandling();
+
+>>>>>>> main
         Sanctum::actingAs(
             $teacher = User::factory()->create([
                 'isAdmin' => true
             ])
         );
+<<<<<<< HEAD
         
         $user->name = 'marta';
 
@@ -337,4 +346,87 @@ class UserTest extends TestCase
         
         $this->assertEquals($user->name, 'marta');
     }   
+=======
+
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'superAdmin' => false,
+            'teacher' => $teacher->id,
+            'email' => 'test@gmail.com'
+        ]);
+
+        $response = $this->patch(route('update', $user->id), [
+            'name' => 'New Name',
+            'email' => $user->email,
+            'password' => 'password',
+            'showPassword' => 'password'
+        ]);
+
+        $response->assertStatus(200);
+
+        $user = $user->fresh();
+
+        $this->assertEquals('New Name', $user->name);
+        $this->assertEquals('test@gmail.com', $user->email);
+    }
+
+    public function test_no_teacher_can_not_edit_student()
+    {
+        $this->withExceptionHandling();
+
+        Sanctum::actingAs(
+            $noTeacher = User::factory()->create([
+                'isAdmin' => false
+            ])
+        );
+
+        $user = User::factory()->create([
+            'name' => 'Correct name',
+            'isAdmin' => false,
+            'superAdmin' => false,
+            'teacher' => $noTeacher->id,
+            'email' => 'test@gmail.com'
+        ]);
+
+        $response = $this->patch(route('update', $user->id), [
+            'name' => 'Bad Name',
+            'email' => 'bademail@gmail.com',
+            'password' => 'password',
+            'showPassword' => 'password'
+        ]);
+
+        $response->assertStatus(401);
+
+        $user = $user->fresh();
+
+        $this->assertEquals('Correct name', $user->name);
+        $this->assertEquals('test@gmail.com', $user->email);
+    }
+
+>>>>>>> main
 }
+
+
+
+
+/* Sanctum::actingAs(
+    $noTeacher = User::factory()->create([
+        'isAdmin' => true
+    ])
+);
+
+$this->patch(route('update', $user->id), [
+    'name' => 'New No Name',
+    'email' => $user->email,
+    'password' => 'password',
+    'showPassword' => 'password'
+]);
+
+/*   $response->assertStatus(200); */
+
+/* $user = $user->fresh();
+
+$this->assertEquals('New No Name', $user->name); */
+
+
+
