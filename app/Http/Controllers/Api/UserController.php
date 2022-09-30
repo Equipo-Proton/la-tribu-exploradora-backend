@@ -146,6 +146,7 @@ class UserController extends Controller
         $user->showPassword = $request->password;
 
         $user->update();
+       
 
         return response()->json([
             'status' => 1,
