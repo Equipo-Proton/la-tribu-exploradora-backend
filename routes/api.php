@@ -26,7 +26,8 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // Rutas del profesor admin
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::patch('/play', [UserController::class, 'play']);
+    Route::get('/playvalue', [UserController::class, 'getPlayvalue']);
+    Route::patch('/play', [UserController::class, 'play'])->middleware('isadmin');
     Route::post('/register', [UserController::class, 'register'])->name('register')->middleware('isadmin');
     Route::get('/users', [UserController::class, 'getUsers'])->name('users')->middleware('isadmin');
     Route::get('/userprofile/{id}', [UserController::class, 'userProfile'])->name('userProfile')->middleware('isadmin');
