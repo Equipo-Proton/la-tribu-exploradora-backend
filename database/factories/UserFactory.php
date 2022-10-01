@@ -25,7 +25,8 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'isAdmin' => false,
             'superAdmin' => false,
-            'showPassword' => 'password'
+            'showPassword' => 'password',
+            'play' => false,
         ];
     }
 

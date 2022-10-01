@@ -154,4 +154,25 @@ class UserController extends Controller
             'data' => $user
         ], 200);
     }
+
+    public function play(Request $request) {
+        $teacher = auth()->user();
+
+        $users = User::all()
+            ->where('isAdmin', '=', 0)
+            ->where('superAdmin', '=', 0)
+            ->where('teacher', '=', $teacher->id);
+        
+        foreach($users as $user) {
+            $user->play = $request->play;
+            
+            $user->update();
+        }
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Users can play',
+            'data' => $users
+        ], 200);
+    }
 }
