@@ -233,37 +233,67 @@ class TeacherTest extends TestCase
         $response->assertStatus(200);
     }
 
-    //prueba
+    
     public function test_admin_can_edit_teacher() 
     {
         $this->withExceptionHandling();
 
-        $teacher = User::factory()->create([
-            'superAdmin' => false,
-            'isAdmin' => true,
-            'name' => 'Josemi'
-        ]);
-
         Sanctum::actingAs(
-            $adminApp = User::factory()->create([
+            $admin = User::factory()->create([
                 'superAdmin' => true
             ])
         );
+
+        $teacher = User::factory()->create([
+            'isAdmin' => true,
+            'superAdmin' => false,
+            'email' => 'test@gmail.com'
+        ]);
         
-        $teacher->name = 'Carla';
+        $response = $this->patch(route('updateTeacher', $teacher->id), [
+            'name' => 'New Name',
+            'email' => $teacher->email,
+            'password' => 'password',
+            'showPassword' => 'password'
+        ]);
 
-        $teacher->update();
-        
-        $response = $this->patch(route('updateTeacher', $teacher->id ));
-        
-        $this->assertEquals($teacher->name, 'Carla');
-    }   
+        $response->assertStatus(200);
 
+        $teacher = $teacher->fresh();
 
-
-
-
+        $this->assertEquals('New Name', $teacher->name);
+        $this->assertEquals('test@gmail.com', $teacher->email);
+    }
     
+    public function test_no_admin_can_not_edit_teacher() 
+    {
+        $this->withExceptionHandling();
 
+        Sanctum::actingAs(
+            $noAdmin = User::factory()->create([
+                'superAdmin' => false
+            ])
+        );
 
+        $teacher = User::factory()->create([
+            'name'  => 'Guillermo',
+            'isAdmin' => true,
+            'superAdmin' => false,
+            'email' => 'guille@gmail.com'
+        ]);
+        
+        $response = $this->patch(route('updateTeacher', $teacher->id), [
+            'name' => 'New Name',
+            'email' => $teacher->email,
+            'password' => 'password',
+            'showPassword' => 'password'
+        ]);
+
+        $response->assertStatus(401);
+
+        $teacher = $teacher->fresh();
+
+        $this->assertEquals('Guillermo', $teacher->name);
+        $this->assertEquals('guille@gmail.com', $teacher->email);
+    }    
 }
