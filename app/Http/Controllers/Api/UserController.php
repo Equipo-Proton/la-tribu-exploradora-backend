@@ -105,6 +105,13 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
+        if($user->isAdmin === 1) {
+            $users = User::where('isAdmin', '=', 0)
+                ->where('superAdmin', '=', 0)
+                ->where('teacher', '=', $user->id)
+                ->tokens()->delete();
+        }
+
         auth()->user()->tokens()->delete();
 
         return response()->json([
@@ -174,5 +181,15 @@ class UserController extends Controller
             'msg' => 'Users can play',
             'data' => $users
         ], 200);
+    }
+
+    public function getPlayValue() {
+        $user = auth()->user();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'This is the play value of the student',
+            'data' => $user->play
+        ]);
     }
 }
