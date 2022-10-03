@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -104,13 +105,6 @@ class UserController extends Controller
     public function logout()
     {
         $user = auth()->user();
-
-        if($user->isAdmin === 1) {
-            $users = User::where('isAdmin', '=', 0)
-                ->where('superAdmin', '=', 0)
-                ->where('teacher', '=', $user->id)
-                ->tokens()->delete();
-        }
 
         auth()->user()->tokens()->delete();
 
