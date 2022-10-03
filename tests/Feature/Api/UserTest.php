@@ -379,29 +379,57 @@ class UserTest extends TestCase
         $this->assertEquals('test@gmail.com', $user->email);
     }
 
+    public function test_teacher_can_edit_play()
+    {
+        $this->withExceptionHandling();
+
+        Sanctum::actingAs(
+            $teacher = User::factory()->create([
+                'isAdmin' => true
+            ])
+        );
+
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'superAdmin' => false,
+            'teacher' => $teacher->id,
+        ]);
+
+        $response = $this->patch(route('play', $user->id), [
+            'play' => 1
+        ]);
+
+        $response->assertStatus(200);
+
+        $user = $user->fresh();
+
+        $this->assertEquals(1, $user->play);
+    }
+
+    public function test_no_teacher_can_edit_play()
+    {
+        $this->withExceptionHandling();
+
+        Sanctum::actingAs(
+            $teacher = User::factory()->create([
+                'isAdmin' => false
+            ])
+        );
+
+        $user = User::factory()->create([
+            'isAdmin' => false,
+            'superAdmin' => false,
+            'teacher' => $teacher->id,
+        ]);
+
+        $response = $this->patch(route('play', $user->id), [
+            'play' => 1
+        ]);
+
+        $response->assertStatus(401);
+
+        $user = $user->fresh();
+
+        $this->assertEquals(0, $user->play);
+    }
 }
-
-
-
-
-/* Sanctum::actingAs(
-    $noTeacher = User::factory()->create([
-        'isAdmin' => true
-    ])
-);
-
-$this->patch(route('update', $user->id), [
-    'name' => 'New No Name',
-    'email' => $user->email,
-    'password' => 'password',
-    'showPassword' => 'password'
-]);
-
-/*   $response->assertStatus(200); */
-
-/* $user = $user->fresh();
-
-$this->assertEquals('New No Name', $user->name); */
-
-
-
