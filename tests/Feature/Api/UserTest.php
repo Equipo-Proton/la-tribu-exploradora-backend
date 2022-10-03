@@ -432,4 +432,20 @@ class UserTest extends TestCase
 
         $this->assertEquals(0, $user->play);
     }
+
+    public function test_get_play_value() {
+        $this->withExceptionHandling();
+
+        Sanctum::actingAs(
+            $student = User::factory()->create([
+                'isAdmin' => false,
+                'superAdmin' => false
+            ])
+        );
+
+        $response = $this->get(route('playValue'));
+        $response->assertStatus(200);
+
+        $this->assertEquals(0, $student->play);
+    }
 }
