@@ -108,10 +108,16 @@ class UserController extends Controller
 
         auth()->user()->tokens()->delete();
 
+        $students = User::where('teacher', '=', $user->id)->get();
+
+        foreach($students as $student) {
+            $student->tokens()->delete();
+        }
+           
         return response()->json([
-            "status" => 1,
-            "msg" => "You are logged out",
-            "data" => $user
+            'status' => 1,
+            'msg' => "You are logged out",
+            'data' => $user,
         ], 200);
     }
 
