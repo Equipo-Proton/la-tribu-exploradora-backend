@@ -63,5 +63,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'Roberto',
             'email' => 'roberto@gmail.com',
         ]);
+
+        User::factory()->create([
+            'name' => 'Rodolfa',
+            'email' => 'rodolfa@gmail.com',
+        ]);
     }
 }
