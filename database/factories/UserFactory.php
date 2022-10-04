@@ -27,6 +27,7 @@ class UserFactory extends Factory
             'superAdmin' => false,
             'showPassword' => 'password',
             'play' => false,
+            'correct' => false,
         ];
     }
 
