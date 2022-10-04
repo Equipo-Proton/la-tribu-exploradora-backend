@@ -25,6 +25,8 @@ return new class extends Migration
             $table->integer('teacher')->references('id')->on('users')->nullable();
             $table->string('showPassword');
             $table->boolean('play')->default(false);
+            $table->string('word')->nullable();
+            $table->boolean('correct')->default(false);
 
             $table->rememberToken();
             $table->timestamps();

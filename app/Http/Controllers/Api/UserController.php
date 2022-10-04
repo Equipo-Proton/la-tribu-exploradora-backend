@@ -192,4 +192,38 @@ class UserController extends Controller
             'data' => $user->play
         ]);
     }
+
+    public function sendWord(Request $request) {
+        $student = auth()->user();
+
+        $student->word = $request->word;
+
+        $student->update();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'This is the word',
+            'data' => $student->word
+        ]);
+    }
+
+    public function sendCorrection(Request $request, $id) {
+        $teacher = auth()->user();
+
+        $user = User::where('isAdmin', '=', 0)
+            ->where('superAdmin', '=', 0)
+            ->where('teacher', '=', $teacher->id)
+            ->findOrFail($id);
+        
+       
+        $user->correct = $request->correct;
+            
+        $user->update();
+        
+        return response()->json([
+            'status' => 1,
+            'msg' => 'User correction sent',
+            'data' => $user
+        ], 200);
+    }
 }
