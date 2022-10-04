@@ -27,6 +27,8 @@ class User extends Authenticatable
         'teacher',
         'showPassword',
         'play',
+        'word',
+        'correct',
     ];
 
     /**
