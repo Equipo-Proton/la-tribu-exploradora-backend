@@ -5155,11 +5155,13 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2022-09-08T09:34:40+00:00"
         },
         {
+=======
+>>>>>>> 2228956 (composer)
             "name": "tijsverkoyen/css-to-inline-styles",
-            "version": "2.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tijsverkoyen/CssToInlineStyles.git",
