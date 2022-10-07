@@ -24,20 +24,20 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         User::factory()->create([
-            'name' => 'José Miguel',
-            'email' => 'josemi@gmail.com',
+            'name' => 'Amara',
+            'email' => 'amara@gmail.com',
             'superAdmin' => true
-        ]);
-
-        User::factory()->create([
-            'name' => 'Kerim',
-            'email' => 'kerim@gmail.com',
-            'isAdmin' => true
         ]);
 
         User::factory()->create([
             'name' => 'Carla',
             'email' => 'carla@gmail.com',
+            'isAdmin' => true
+        ]);
+
+        User::factory()->create([
+            'name' => 'José Miguel',
+            'email' => 'josemi@gmail.com',
             'isAdmin' => true
         ]);
 
@@ -48,63 +48,63 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'Luis',
+            'name' => 'Inma',
             'email' => 'luis@gmail.com',
             'teacher' => 2
         ]);
 
         User::factory()->create([
-            'name' => 'Juan',
-            'email' => 'juan@gmail.com',
-            'teacher' => 3
+            'name' => 'Kerim',
+            'email' => 'kerim@gmail.com',
+            'teacher' => 2
         ]);
 
         User::factory()->create([
-            'name' => 'Roberto',
-            'email' => 'roberto@gmail.com',
-            'teacher' => 3
+            'name' => 'Mario',
+            'email' => 'mario@gmail.com',
+            'teacher' => 2
         ]);
 
         User::factory()->create([
-            'name' => 'Rodolfa',
-            'email' => 'rodolfa@gmail.com',
-            'teacher' => 3
+            'name' => 'Buda',
+            'email' => 'buda@gmail.com',
+            'teacher' => 2
         ]);
 
         User::factory()->create([
             'name' => 'Maruja',
             'email' => 'maruja@gmail.com',
-            'teacher' => 2
+            'teacher' => 3
         ]);
 
         User::factory()->create([
             'name' => 'Joaquín',
             'email' => 'joaquín@gmail.com',
-            'teacher' => 2
+            'teacher' => 3
         ]);
 
         User::factory()->create([
             'name' => 'Pableras',
             'email' => 'pableras@gmail.com',
-            'teacher' => 2
+            'teacher' => 3
         ]);
 
         User::factory()->create([
             'name' => 'Manolo',
             'email' => 'manolo@gmail.com',
-            'teacher' => 2
+            'teacher' => 3
         ]);
 
         User::factory()->create([
             'name' => 'Laura',
             'email' => 'Laura@gmail.com',
-            'teacher' => 2
+            'teacher' => 3
         ]);
 
         User::factory()->create([
             'name' => 'Marcos',
             'email' => 'marcos@gmail.com',
-            'teacher' => 2
+            'teacher' => 3
         ]);
 
         User::factory()->create([
