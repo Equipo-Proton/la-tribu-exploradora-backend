@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\PlayController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -21,15 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Ruta login sin middlewares
+// login no middleware
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-// Rutas del profesor admin
+// admin routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::patch('/correction/{id}', [UserController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
-    Route::get('/playvalue', [UserController::class, 'getPlayvalue'])->name('playValue');
-    Route::patch('/play', [UserController::class, 'play'])->name('play')->middleware('isadmin');
-    Route::patch('/word', [UserController::class, 'sendWord'])->name('word');
     Route::post('/register', [UserController::class, 'register'])->name('register')->middleware('isadmin');
     Route::get('/users', [UserController::class, 'getUsers'])->name('users')->middleware('isadmin');
     Route::get('/userprofile/{id}', [UserController::class, 'userProfile'])->name('userProfile')->middleware('isadmin');
@@ -38,7 +35,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('deleteUser')->middleware('isadmin');
 });
 
-// Rutas del director superadmin
+// superadmin routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/teacher/register', [TeacherController::class, 'teacherRegister'])->name('teacherRegister')->middleware('superadmin');
     Route::get('/teachers', [TeacherController::class, 'listTeachers'])->name('teachers')->middleware('superadmin');
@@ -48,3 +45,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/listusers', [TeacherController::class, 'listUsers'])->middleware('superadmin');
 });
 
+// game routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::patch('/correction/{id}', [PlayController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
+Route::get('/playvalue', [PlayController::class, 'getPlayvalue'])->name('playValue');
+Route::patch('/play', [PlayController::class, 'play'])->name('play')->middleware('isadmin');
+Route::patch('/word', [PlayController::class, 'sendWord'])->name('word');
+});
