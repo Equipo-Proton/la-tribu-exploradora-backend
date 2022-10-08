@@ -3,27 +3,52 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Arr;
 
 class TeacherController extends Controller
 {
-    public function teacherRegister(Request $request)
+    // teachers - list function
+    public function list()
+    {
+        $teachers = Teacher::where('superAdmin', '=', 0)->get();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'List of teachers',
+            'data' => $teachers
+        ], 200);
+    }
+
+    // teachers - profile function
+    public function profile($id)
+    {
+        $teacher = Teacher::findOrFail($id);
+            
+        return response()->json([
+            "status" => 1,
+            "msg" => "Teacher profile",
+            "data" => $teacher
+        ], 200);
+    }
+
+    // teachers - register / create function
+    public function register(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:teachers',
             'password' => 'required|confirmed'
         ]);
 
-        $newTeacher = new User();
+        $newTeacher = new Teacher();
 
         $newTeacher->name = $request->name;
         $newTeacher->email = $request->email;
         $newTeacher->password = Hash::make($request->password);
-        $newTeacher->isAdmin = true;
-        $newTeacher->superAdmin = false;
         $newTeacher->showPassword = $request->password;
 
         $newTeacher->save();
@@ -35,73 +60,50 @@ class TeacherController extends Controller
         ], 200);
     }
 
-    public function listTeachers()
+    // teachers - delete function
+    public function delete($id)
     {
-        $teachers = User::all()
-            ->where('isAdmin', '=', 1)
-            ->where('superAdmin', '=', 0);
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'This is the list of teachers',
-            'data' => $teachers
-        ], 200);
-    }
-
-    public function listUsers()
-    {
-        $users = User::all()
-            ->where('superAdmin', '=', 0);
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'This is the list of all users',
-            'data' => $users
-        ], 200);
-    }
-
-    public function profile($id) {
-        $user = User::where('superAdmin', '=', 0)
-            ->findOrFail($id);
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'This is the user',
-            'data' => $user
-        ]);
-    }
-
-    public function deleteTeacher($id)
-    {
-        $teacher = User::where('isAdmin', '=', 1)
-            ->where('superAdmin', '=', 0)
-            ->findOrFail($id);
+        $teacher = Teacher::findOrFail($id);
 
         $teacher->delete();
 
         return response()->json([
             "status" => 1,
-            "msg" => "Teacher successfully deleted"
+            "msg" => "Teacher deleted"
         ], 200);
     }
 
-    public function updateTeacher(Request $request, $id)
+    // teachers - update function
+    public function update(Request $request, $id)
     {
-        $user = User::where('isAdmin', '=', 1)
-            ->where('superAdmin', '=', 0)
-            ->findOrFail($id);
+        $teacher = Teacher::findOrFail($id);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->showPassword = $request->password;
+        $teacher->name = $request->name;
+        $teacher->email = $request->email;
+        $teacher->password = Hash::make($request->password);
+        $teacher->showPassword = $request->password;
 
-        $user->update();
+        $teacher->update();
 
         return response()->json([
             'status' => 1,
-            'msg' => 'Teacher updated and you have logged out',
-            'data' => $user
+            'msg' => 'Teacher updated',
+            'data' => $teacher
         ], 200);
+    }
+
+    // students - list function
+    public function listAll() {
+        $teachers = Teacher::all();
+        
+        $students = User::all();
+
+        $allUsers = Arr::collapse([[$teachers], [$students]]);
+        
+        return response()->json([
+            'status' => 1,
+            'msg' => 'All users of app',
+            'data' => $allUsers
+        ]);
     }
 }

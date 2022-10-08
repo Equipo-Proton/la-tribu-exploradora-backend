@@ -1,54 +1,45 @@
 <?php
 
+use App\Http\Controllers\Api\GameController;
 use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\PlayController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// login no middleware
+// students http requests
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
-// admin routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/register', [UserController::class, 'register'])->name('register')->middleware('isadmin');
-    Route::get('/users', [UserController::class, 'getUsers'])->name('users')->middleware('isadmin');
-    Route::get('/userprofile/{id}', [UserController::class, 'userProfile'])->name('userProfile')->middleware('isadmin');
     Route::get('/logout', [UserController::class, 'logout']);
-    Route::patch('/update/{id}', [UserController::class, 'update'])->name('update')->middleware('isadmin');
-    Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('deleteUser')->middleware('isadmin');
+    Route::get('/student/list', [UserController::class, 'list'])->name('list')->middleware('isadmin');
+    Route::get('/student/profile/{id}', [UserController::class, 'profile'])->name('profile')->middleware('isadmin');
+    Route::post('/student/register', [UserController::class, 'register'])->name('register')->middleware('isadmin');
+    Route::delete('/student/delete/{id}', [UserController::class, 'delete'])->name('delete')->middleware('isadmin');
+    Route::patch('/student/update/{id}', [UserController::class, 'update'])->name('update')->middleware('isadmin');
 });
 
-// superadmin routes
+// teachers http requests
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/teacher/register', [TeacherController::class, 'teacherRegister'])->name('teacherRegister')->middleware('superadmin');
-    Route::get('/teachers', [TeacherController::class, 'listTeachers'])->name('teachers')->middleware('superadmin');
-    Route::get('/profile/{id}', [TeacherController::class, 'profile'])->name('profile')->middleware('superadmin');
-    Route::patch('/teacher/update/{id}', [TeacherController::class, 'updateTeacher'])->name('updateTeacher')->middleware('superadmin');
-    Route::delete('/teacher/delete/{id}', [TeacherController::class, 'deleteTeacher'])->name('deleteTeacher')->middleware('superadmin');
-    Route::get('/listusers', [TeacherController::class, 'listUsers'])->middleware('superadmin');
+    Route::get('/teacher/list', [TeacherController::class, 'list'])->name('list')->middleware('superadmin');
+    Route::get('/teacher/profile/{id}', [TeacherController::class, 'profile'])->name('profile')->middleware('superadmin');
+    Route::post('/teacher/register', [TeacherController::class, 'register'])->name('register')->middleware('superadmin');
+    Route::delete('/teacher/delete/{id}', [TeacherController::class, 'delete'])->name('delete')->middleware('superadmin');
+    Route::patch('/teacher/update/{id}', [TeacherController::class, 'update'])->name('update')->middleware('superadmin');
+    Route::get('/listall', [TeacherController::class, 'listAll'])->name('listAll')->middleware('superadmin');
 });
 
-// game routes
+// game http routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-Route::patch('/correction/{id}', [PlayController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
-Route::get('/playvalue', [PlayController::class, 'getPlayvalue'])->name('playValue');
-Route::patch('/play', [PlayController::class, 'play'])->name('play')->middleware('isadmin');
-Route::patch('/word', [PlayController::class, 'sendWord'])->name('word');
+    Route::patch('/game/changepermission', [GameController::class, 'changePlayPermission'])->middleware('isadmin');
+    Route::get('/game/getpermission', [GameController::class, 'getPlayPermission']);
+    Route::patch('/game/sendword', [GameController::class, 'sendWord'])->name('sendWord');
+    Route::patch('/game/sendcorrection/{id}', [GameController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
+    Route::patch('/game/wordnull', [GameController::class, 'wordNull'])->name('wordNull')->middleware('isadmin');
+    Route::get('/game/getcorrection', [GameController::class, 'getCorrection']);
+    Route::patch('/game/correctionnull', [GameController::class, 'correctionNull'])->name('correctionNull');
 });
+

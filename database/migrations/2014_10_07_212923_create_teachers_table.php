@@ -13,21 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('teachers', function (Blueprint $table) {
             $table->id();
 
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('isAdmin')->default(false);
+            $table->boolean('superAdmin')->default(false);
             $table->string('showPassword');
-            $table->boolean('play_permission')->default(false);
-            $table->string('word')->nullable();
-            $table->boolean('correction')->nullable();
-
-            $table->unsignedBigInteger('teacher_id');
-            $table->foreign('teacher_id')->references('id')->on('teachers')
-                ->onDelete('cascade');
 
             $table->rememberToken();
             $table->timestamps();
@@ -41,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('teachers');
     }
 };

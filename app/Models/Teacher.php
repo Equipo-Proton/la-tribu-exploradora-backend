@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Teacher extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -15,11 +15,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'teacher_id',
+        'isAdmin',
+        'superAdmin',
         'showPassword',
-        'play_permission',
-        'word',
-        'correction',
     ];
 
     protected $hidden = [
@@ -31,7 +29,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function teacher() {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
+    public function users() {
+        return $this->hasMany(User::class);
     }
 }

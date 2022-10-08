@@ -3,40 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
-
-        $newUser = new User();
-        $teacher = auth()->user();
-
-        $newUser->name = $request->name;
-        $newUser->email = $request->email;
-        $newUser->password = Hash::make($request->password);
-        $newUser->isAdmin = false;
-        $newUser->teacher = $teacher->id;
-        $newUser->showPassword = $request->password;
-
-        $newUser->save();
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'User created',
-            'data' => $newUser
-        ], 200);
-    }
-
+    // students - login function
     public function login(Request $request)
     {
         $request->validate([
@@ -44,16 +18,18 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::where('email', '=', $request->email)->first();
+        $student = User::where('email', '=', $request->email)->first();
 
-        if (isset($user->id)) {
-            if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('auth_token')->plainTextToken;
+        $teacher = Teacher::where('email', '=', $request->email)->first();
+
+        if (isset($student->id)) {
+            if (Hash::check($request->password, $student->password)) {
+                $token = $student->createToken('auth_token')->plainTextToken;
 
                 return response()->json([
                     'status' => 1,
-                    'msg' => 'You are logged in',
-                    'user' => $user,
+                    'msg' => 'Student is login',
+                    'data' => $student,
                     'access_token' => $token
                 ], 200);
             }
@@ -64,51 +40,39 @@ class UserController extends Controller
             ], 404);
         }
 
+        if (isset($teacher->id)) {
+            if (Hash::check($request->password, $teacher->password)) {
+                $token = $teacher->createToken('auth_token')->plainTextToken;
+
+                return response()->json([
+                    'status' => 1,
+                    'msg' => 'Teacher is login',
+                    'data' => $teacher,
+                    'access_token' => $token
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 0,
+                'msg' => 'Incorrect password'
+            ], 404);
+        }
+
+
         return response()->json([
             'status' => 0,
             'msg' => 'User no registered'
         ], 404);
     }
 
-    public function getUsers()
-    {
-        $teacher = auth()->user();
-
-        $users = User::all()
-            ->where('isAdmin', '=', 0)
-            ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->id);
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'This is the list of users',
-            'data' => $users
-        ], 200);
-    }
-
-    public function userProfile($id)
-    {
-        $teacher = auth()->user();
-
-        $user = User::where('isAdmin', '=', 0)
-            ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->id)
-            ->findOrFail($id);
-            
-        return response()->json([
-            "status" => 1,
-            "msg" => "This is the user profile",
-            "data" => $user
-        ], 200);
-    }
-
+    // teachers - logout function
     public function logout()
     {
-        $user = auth()->user();
+        $teacher = auth()->user();
+
+        $students = User::where('teacher_id', '=', $teacher->id)->get();
 
         auth()->user()->tokens()->delete();
-
-        $students = User::where('teacher', '=', $user->id)->get();
 
         foreach($students as $student) {
             $student->tokens()->delete();
@@ -116,55 +80,105 @@ class UserController extends Controller
            
         return response()->json([
             'status' => 1,
-            'msg' => "You are logged out",
-            'data' => $user,
+            'msg' => "Teacher logout",
+            'data' => $teacher,
         ], 200);
     }
 
+    // students - list function
+    public function list()
+    {
+        $teacher = auth()->user();
+
+        $students = User::all()
+            ->where('teacher_id', '=', $teacher->id);
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'List of students',
+            'data' => $students
+        ], 200);
+    }
+
+    // students - profile function
+    public function profile($id)
+    {
+        $teacher = auth()->user();
+
+        $student = User::where('teacher_id', '=', $teacher->id)
+            ->findOrFail($id);
+
+        return response()->json([
+            "status" => 1,
+            "msg" => "Student profile",
+            "data" => $student
+        ], 200);
+    }
+
+    // students - register / create function
+    public function register(Request $request)
+    {
+        $teacher = auth()->user();
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed'
+        ]);
+
+        $newStudent = new User();
+
+        $newStudent->name = $request->name;
+        $newStudent->email = $request->email;
+        $newStudent->password = Hash::make($request->password);
+        $newStudent->showPassword = $request->password;
+        $newStudent->teacher_id = $teacher->id;
+
+        $newStudent->save();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Student created',
+            'data' =>  $newStudent
+        ], 200);
+    }
+
+    // students - delete function
     public function delete($id)
     {
         $teacher = auth()->user();
 
-        $user = User::where('isAdmin', '=', 0)
-            ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->id)
+        $student = User::where('teacher_id', '=', $teacher->id)
             ->findOrFail($id);
 
-        $user->delete();
+        $student->delete();
 
         return response()->json([
             "status" => 1,
-            "msg" => "User successfully deleted"
+            "msg" => "Student deleted"
         ], 200);
     }
 
+     // students - update function
     public function update(Request $request, $id)
     {
         $teacher = auth()->user();
 
-        $user = User::where('isAdmin', '=', 0)
-            ->where('superAdmin', '=', 0)
-            ->where('teacher', '=', $teacher->id)
+        $student = User::where('teacher_id', '=', $teacher->id)
             ->findOrFail($id);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->showPassword = $request->password;
+        $student ->name = $request->name;
+        $student ->email = $request->email;
+        $student ->password = Hash::make($request->password);
+        $student ->showPassword = $request->password;
 
-        $user->update();
-       
+        $student ->update();
+
 
         return response()->json([
             'status' => 1,
-            'msg' => 'User updated and you have logged out',
-            'data' => $user
+            'msg' => 'Student updated',
+            'data' => $student 
         ], 200);
     }
-
-   
-  
-  
-
-   
 }
