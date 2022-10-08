@@ -9,15 +9,16 @@ use Illuminate\Http\Request;
 class GameController extends Controller
 {
     // game - permission function
-    public function changePlayPermission(Request $request) {
+    public function changePlayPermission(Request $request)
+    {
         $teacher = auth()->user();
 
         $students = User::where('teacher_id', '=', $teacher->id)
             ->get();
-        
-        foreach($students as $student) {
+
+        foreach ($students as $student) {
             $student->play_permission = $request->play;
-            
+
             $student->update();
         }
 
@@ -29,7 +30,8 @@ class GameController extends Controller
     }
 
     // game - get play permission
-    public function getPlayPermission() {
+    public function getPlayPermission()
+    {
         $student = auth()->user();
 
         return response()->json([
@@ -40,7 +42,8 @@ class GameController extends Controller
     }
 
     // game - get correction
-    public function getCorrection() {
+    public function getCorrection()
+    {
         $student = auth()->user();
 
         return response()->json([
@@ -51,7 +54,8 @@ class GameController extends Controller
     }
 
     // game - send word function
-    public function sendWord(Request $request) {
+    public function sendWord(Request $request)
+    {
         $student = auth()->user();
 
         $student->word = $request->word;
@@ -66,13 +70,14 @@ class GameController extends Controller
     }
 
     // game - set word to null function
-    public function wordNull(Request $request) {
+    public function wordNull(Request $request)
+    {
         $teacher = auth()->user();
 
         $students = User::where('teacher_id', '=', $teacher->id)
             ->get();
 
-        foreach($students as $student) {
+        foreach ($students as $student) {
             $student->word = $request->word;
 
             $student->update();
@@ -86,15 +91,17 @@ class GameController extends Controller
     }
 
     // game - send correction 
-    public function sendCorrection(Request $request, $id) {
+    public function sendCorrection(Request $request, $id)
+    {
         $teacher = auth()->user();
 
-        $student = User::where('teacher_id', '=', $teacher->id)->first();
-        
+        $student = User::where('teacher_id', '=', $teacher->id)
+            ->findOrFail($id);
+
         $student->correction = $request->correct;
-            
+
         $student->update();
-        
+
         return response()->json([
             'status' => 1,
             'msg' => 'User correction sent',
@@ -102,8 +109,9 @@ class GameController extends Controller
         ], 200);
     }
 
-     // game - set correction to null function
-     public function correctionNull(Request $request) {
+    // game - set correction to null function
+    public function correctionNull(Request $request)
+    {
         $student = auth()->user();
 
         $student->correction = $request->correction;
@@ -112,9 +120,8 @@ class GameController extends Controller
 
         return response()->json([
             'status' => 1,
-            'msg' => 'Correction null',
+            'msg' => 'This is the correction',
             'data' => $student
         ]);
     }
-
 }
