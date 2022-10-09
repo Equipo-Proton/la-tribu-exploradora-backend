@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Request;
@@ -15,78 +16,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-
     use RefreshDatabase;
-
-    // register tests passed
-    public function test_user_no_auth_can_not_register()
+    // students - login function
+    public function test_user_can_authenticate()
     {
-        $this->withoutExceptionHandling();
+        $teacher = Teacher::factory()->create();
 
-        $user = User::factory()->create();
-
-        $this->actingAs($user);
-
-        $response = $this->attemptToRegister();
-
-        $response->assertStatus(401);
-        $this->assertAuthenticatedAs(User::first());
-        $this->assertCount(1, User::all());
-    }
-
-    public function test_no_teacher_can_not_register()
-    {
-        $this->withoutExceptionHandling();
-
-        Sanctum::actingAs(
-            $authUser = User::factory()->create([
-                'isAdmin' => false
-            ])
-        );
-
-        $response = $this->attemptToRegister();
-
-        $response->assertStatus(401);
-        $this->assertAuthenticatedAs(User::first());
-        $this->assertCount(1, User::all());
-    }
-
-    public function test_teacher_can_register()
-    {
-        $this->withoutExceptionHandling();
-
-        Sanctum::actingAs(
-            $authUser = User::factory()->create([
-                'isAdmin' => true
-            ])
-        );
-
-        $response = $this->attemptToRegister();
-
-        $response->assertStatus(200);
-        $this->assertAuthenticatedAs(User::first());
-        $this->assertCount(2, User::all());
-    }
-
-
-    protected function attemptToRegister(array $params = [])
-    {
-        return $this->post(route('register'), array_merge([
-            'name' => 'John',
-            'email' => 'john@gmail.com',
-            'password' => 'password',
-            'password_confirmation' => 'password'
-        ], $params));
-    }
-
-    // log in tests passed
-    public function test_users_can_authenticate()
-    {
         $user = User::factory()->create();
 
         $response = $this->postJson(route('login'), [
@@ -98,8 +33,10 @@ class UserTest extends TestCase
         $this->assertArrayHasKey('access_token', $response->json());
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password()
+    public function test_user_can_not_authenticate_with_invalid_password()
     {
+        $teacher = Teacher::factory()->create();
+
         $user = User::factory()->create();
 
         $response = $this->postJson(route('login'), [
@@ -110,22 +47,173 @@ class UserTest extends TestCase
         $response->assertStatus(404);
     }
 
-    // log out test passed
-    public function test_user_can_logout()
+    public function test_user_can_not_authenticate_with_invalid_email()
+    {
+        $teacher = Teacher::factory()->create();
+
+        $user = User::factory()->create([]);
+
+        $response = $this->postJson(route('login'), [
+            'email' => 'guiller@gmail.com',
+            'password' => 'password'
+        ]);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_user_can_not_authenticate_with_wrong_email()
+    {
+        $teacher = Teacher::factory()->create();
+
+        $user = User::factory()->create();
+
+        $response = $this->postJson(route('login'), [
+            'email' => 'this is not an email',
+            'password' => 'wrong-password'
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    // users - logout function
+    public function test_teacher_can_logout()
     {
         $this->withoutExceptionHandling();
 
         Sanctum::actingAs(
-            $user = User::factory()->create([])
+            $teacher = Teacher::factory()->create([
+                'isAdmin' => true
+            ])
         );
 
+        Sanctum::actingAs(
+            $student = User::factory()->create([])
+        );
 
         $response = $this->get('/api/logout');
         $response->assertStatus(200);
+        $this->assertFalse($teacher === auth()->check());
+        $this->assertFalse($student === auth()->check());
+    }
+
+    public function test_student_can_logout()
+    {
+        $this->withoutExceptionHandling();
+
+        $teacher = Teacher::factory()->create([
+            'isAdmin' => true
+        ])
+
+        Sanctum::actingAs(
+            $student = User::factory()->create([])
+        );
+
+        $response = $this->get('/api/logout');
+        $response->assertStatus(200);
+        $this->assertFalse($student === auth()->check());
+    }
+
+    // students - register function
+    public function test_no_auth_user_can_not_register()
+    {
+        $this->withoutExceptionHandling();
+
+        $teacher = Teacher::factory()->create();
+
+        $this->actingAs($teacher);
+
+        $response = $this->attemptToRegister();
+
+        $response->assertStatus(401);
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(1, Teacher::all());
+    }
+
+    public function test_no_teacher_can_not_register_student()
+    {
+        $this->withoutExceptionHandling();
+
+        Sanctum::actingAs(
+            $teacher = Teacher::factory()->create([
+                'isAdmin' => false
+            ])
+        );
+
+        $response = $this->attemptToRegister();
+
+        $response->assertStatus(401);
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(1, Teacher::all());
+        $this->assertCount(0, User::all());
+    }
+
+    public function test_teacher_can_register_student()
+    {
+        $this->withoutExceptionHandling();
+
+        Sanctum::actingAs(
+            $teacher = Teacher::factory()->create([
+                'isAdmin' => true
+            ])
+        );
+
+        $response = $this->attemptToRegister();
+
+        $response->assertStatus(200);
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(1, Teacher::all());
+        $this->assertCount(1, User::all());
+    }
+
+    public function test_student_can_not_register_student()
+    {
+        $this->withoutExceptionHandling();
+
+        $teacher = Teacher::factory()->create();
+
+        Sanctum::actingAs(
+            $student = User::factory()->create([])
+        );
+
+        $response = $this->attemptToRegister();
+
+        $response->assertStatus(401);
+        $this->assertAuthenticatedAs(User::first());
+        $this->assertCount(1, User::all());
+    }
+
+    public function test_director_can_not_register_student()
+    {
+        $this->withoutExceptionHandling();
+
+        Sanctum::actingAs(
+            $director = Teacher::factory()->create([
+                'superAdmin' => true
+            ])
+        );
+
+        $response = $this->attemptToRegister();
+
+        $response->assertStatus(401);
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(1, Teacher::all());
+        $this->assertCount(0, User::all());
+    }
+
+    protected function attemptToRegister(array $params = [])
+    {
+        return $this->post(route('registerStudent'), array_merge([
+            'name' => 'John',
+            'email' => 'john@gmail.com',
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ], $params));
     }
 
 
-    // users list tests passed
+
+
+    /*  // users list tests passed
     public function test_user_no_auth_can_not_see_users_list()
     {
         $this->withoutExceptionHandling();
@@ -313,7 +401,7 @@ class UserTest extends TestCase
 
         $response = $this->assertEquals($student->teacher, $teacher->id);
     }
-    
+
     public function test_teacher_can_edit_student()
     {
         $this->withExceptionHandling();
@@ -433,7 +521,8 @@ class UserTest extends TestCase
         $this->assertEquals(0, $user->play);
     }
 
-    public function test_get_play_value() {
+    public function test_get_play_value()
+    {
         $this->withExceptionHandling();
 
         Sanctum::actingAs(
@@ -447,5 +536,5 @@ class UserTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertEquals(0, $student->play);
-    }
+    } */
 }

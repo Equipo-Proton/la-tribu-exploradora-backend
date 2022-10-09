@@ -70,7 +70,7 @@ class UserController extends Controller
     {
         $teacher = auth()->user();
 
-        $students = User::where('teacher_id', '=', $teacher->id)->get();
+        $students = $teacher->users;
 
         auth()->user()->tokens()->delete();
 
@@ -80,7 +80,7 @@ class UserController extends Controller
            
         return response()->json([
             'status' => 1,
-            'msg' => "Teacher logout",
+            'msg' => "User logout",
             'data' => $teacher,
         ], 200);
     }
@@ -90,8 +90,7 @@ class UserController extends Controller
     {
         $teacher = auth()->user();
 
-        $students = User::all()
-            ->where('teacher_id', '=', $teacher->id);
+        $students = $teacher->users;
 
         return response()->json([
             'status' => 1,
@@ -105,8 +104,8 @@ class UserController extends Controller
     {
         $teacher = auth()->user();
 
-        $student = User::where('teacher_id', '=', $teacher->id)
-            ->findOrFail($id);
+        $student = $teacher->users
+            ->find($id);
 
         return response()->json([
             "status" => 1,
@@ -148,8 +147,8 @@ class UserController extends Controller
     {
         $teacher = auth()->user();
 
-        $student = User::where('teacher_id', '=', $teacher->id)
-            ->findOrFail($id);
+        $student = $teacher->users
+            ->find($id);
 
         $student->delete();
 
@@ -164,8 +163,8 @@ class UserController extends Controller
     {
         $teacher = auth()->user();
 
-        $student = User::where('teacher_id', '=', $teacher->id)
-            ->findOrFail($id);
+        $student = $teacher->users
+            ->find($id);
 
         $student ->name = $request->name;
         $student ->email = $request->email;
