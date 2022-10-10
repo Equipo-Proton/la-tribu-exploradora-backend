@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::patch('/game/sendword', [GameController::class, 'sendWord'])->name('sendWord');
     Route::patch('/game/sendcorrection/{id}', [GameController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
     Route::patch('/game/wordnull', [GameController::class, 'wordNull'])->name('wordNull')->middleware('isadmin');
+    Route::patch('/game/wordnull/{id}', [GameController::class, 'wordStudentNull'])->name('wordStudentNull')->middleware('isadmin');
     Route::get('/game/getcorrection', [GameController::class, 'getCorrection']);
     Route::patch('/game/correctionnull', [GameController::class, 'correctionNull'])->name('correctionNull');
 });

@@ -90,6 +90,27 @@ class GameController extends Controller
         ]);
     }
 
+    // game - set student id word to null function
+    public function wordStudentNull(Request $request, $id)
+    {
+        $teacher = auth()->user();
+
+        $student = User::where('teacher_id', '=', $teacher->id)
+            ->find($id);
+
+
+        $student->word = $request->word;
+
+        $student->update();
+
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'This is the word',
+            'data' => $student
+        ]);
+    }
+
     // game - send correction 
     public function sendCorrection(Request $request, $id)
     {
