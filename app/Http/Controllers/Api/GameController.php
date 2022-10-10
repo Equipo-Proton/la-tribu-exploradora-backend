@@ -145,4 +145,33 @@ class GameController extends Controller
             'data' => $student
         ]);
     }
+
+    public function show(Request $request, $id)
+    {
+        $teacher = auth()->user();
+
+        $student = User::where('teacher_id', '=', $teacher->id)
+            ->findOrFail($id);
+
+        $student->show = $request->show;
+
+        $student->update();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'User show',
+            'data' => $student
+        ], 200);
+    }
+
+    public function getShow()
+    {
+        $student = auth()->user();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'This is the play value of the student',
+            'data' => $student->show
+        ]);
+    }
 }

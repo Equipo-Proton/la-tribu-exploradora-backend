@@ -19,6 +19,7 @@ class User extends Authenticatable
         'showPassword',
         'play_permission',
         'word',
+        'show',
         'correction',
     ];
 

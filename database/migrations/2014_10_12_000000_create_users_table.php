@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('showPassword');
             $table->boolean('play_permission')->default(false);
             $table->string('word')->nullable();
+            $table->string('show')->nullable();
             $table->boolean('correction')->nullable();
 
             $table->unsignedBigInteger('teacher_id');
