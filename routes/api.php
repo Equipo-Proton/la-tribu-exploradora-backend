@@ -15,7 +15,7 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // students http requests
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/logout', [UserController::class, 'logout']);
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/student/list', [UserController::class, 'list'])->name('listStudents')->middleware('isadmin');
     Route::get('/student/profile/{id}', [UserController::class, 'profile'])->name('profileStudent')->middleware('isadmin');
     Route::post('/student/register', [UserController::class, 'register'])->name('registerStudent')->middleware('isadmin');
@@ -35,8 +35,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 // game http routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::patch('/game/changepermission', [GameController::class, 'changePlayPermission'])->middleware('isadmin');
-    Route::get('/game/getpermission', [GameController::class, 'getPlayPermission']);
+    Route::patch('/game/changepermission', [GameController::class, 'changePlayPermission'])->name('changePermission')->middleware('isadmin');
+    Route::get('/game/getpermission', [GameController::class, 'getPlayPermission'])->name('getPermission');
     Route::patch('/game/sendword', [GameController::class, 'sendWord'])->name('sendWord');
     Route::patch('/game/sendcorrection/{id}', [GameController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
     Route::patch('/game/wordnull', [GameController::class, 'wordNull'])->name('wordNull')->middleware('isadmin');

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -10,65 +11,79 @@ use Tests\TestCase;
 
 class TeacherTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     use RefreshDatabase;
-
-    // register tests passed
-    public function test_director_no_auth_can_not_register() {
+    // register //
+    public function test_no_auth_user_can_not_register()
+    {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create();
-    
-        $this->actingAs($user);
+        $teacher = Teacher::factory()->create();
 
-        $response = $this->attemptToRegisterTeacher();
+        $this->actingAs($teacher);
+
+        $response = $this->attemptToRegister();
 
         $response->assertStatus(401);
-        $this->assertAuthenticatedAs(User::first());
-        $this->assertCount(1, User::all());
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(1, Teacher::all());
     }
 
-    public function test_no_director_can_not_register()
+    public function test_no_director_can_not_register_teacher()
     {
         $this->withoutExceptionHandling();
 
         Sanctum::actingAs(
-            $authUser = User::factory()->create([
-                   'superAdmin' => false
+            $director = Teacher::factory()->create([
+                'superAdmin' => false
             ])
-        ); 
+        );
 
-        $response = $this->attemptToRegisterTeacher();
+        $response = $this->attemptToRegister();
 
         $response->assertStatus(401);
-        $this->assertAuthenticatedAs(User::first());
-        $this->assertCount(1, User::all());
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(1, Teacher::all());
+        $this->assertCount(0, User::all());
     }
 
-    public function test_director_can_register()
+    public function test_director_can_register_teacher()
     {
         $this->withoutExceptionHandling();
 
         Sanctum::actingAs(
-            $authUser = User::factory()->create([
-                   'superAdmin' => true
+            $director = Teacher::factory()->create([
+                'superAdmin' => true
             ])
-        ); 
+        );
 
-        $response = $this->attemptToRegisterTeacher();
+        $response = $this->attemptToRegister();
 
         $response->assertStatus(200);
-        $this->assertAuthenticatedAs(User::first());
-        $this->assertCount(2, User::all());
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(2, Teacher::all());
     }
 
-    protected function attemptToRegisterTeacher(array $params = [])
+    public function test_director_can_not_register_student()
     {
-        return $this->post(route('teacherRegister'), array_merge([
+        $this->withoutExceptionHandling();
+
+        Sanctum::actingAs(
+            $director = Teacher::factory()->create([
+                'superAdmin' => true
+            ])
+        );
+
+        $response = $this->attemptToRegisterStudent();
+
+        $response->assertStatus(401);
+        $this->assertAuthenticatedAs(Teacher::first());
+        $this->assertCount(1, Teacher::all());
+        $this->assertCount(0, User::all());
+    }
+
+    protected function attemptToRegister(array $params = [])
+    {
+        return $this->post(route('registerTeacher'), array_merge([
             'name' => 'John',
             'email' => 'john@gmail.com',
             'password' => 'password',
@@ -76,118 +91,87 @@ class TeacherTest extends TestCase
         ], $params));
     }
 
+    protected function attemptToRegisterStudent(array $params = [])
+    {
+        return $this->post(route('registerStudent'), array_merge([
+            'name' => 'John',
+            'email' => 'john@gmail.com',
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ], $params));
+    }
+    // done //
+
      // teacher list tests passed
      public function test_user_no_auth_can_not_see_teachers_list()
      {
          $this->withoutExceptionHandling();
+
+       
+        $director = Teacher::factory()->create([
+            'superAdmin' => true
+        ]);
  
-         $user = User::factory()->create();
+         $student = User::factory()->create();
      
-         $this->actingAs($user);
+         $this->actingAs($student);
  
-         $response = $this->get('/api/teachers');
+         $response = $this->get(route('listTeachers'));
          $response->assertStatus(401);
      }
      
-     public function test_if_auth_user_no_director_can_not_see_teachers_list()
+     public function test_if_auth_user_director_can__see_teachers_list()
      {
-         $this->withExceptionHandling();
- 
-         User::factory()->create();
- 
-         Sanctum::actingAs(
-             $user = User::factory()->create([
-                    'superAdmin' => false
-             ])
-         ); 
- 
- 
-         $response = $this->get('/api/teachers');        
-         $response->assertStatus(401);
-     } 
- 
-     public function test_if_auth_user_director_can_see_teachers_list()
-     {
-         $this->withExceptionHandling();
- 
-         User::factory()->create([
-            'isAdmin' => true
-         ]);
+        $this->withoutExceptionHandling();
 
-         User::factory()->create([
-            'isAdmin' => false
-         ]);
+       Sanctum::actingAs(
+        $director = Teacher::factory()->create([
+            'superAdmin' => true
+        ])
+    );
+         $student = User::factory()->create();
+     
+         $this->actingAs($director);
  
-         Sanctum::actingAs(
-             $user = User::factory()->create([
-                    'superAdmin' => true
-             ])
-         ); 
- 
-         $users = User::all();
- 
-         $response = $this->get('/api/teachers');        
+         $response = $this->get(route('listTeachers'));
          $response->assertStatus(200);
-         $this->assertCount(1, User::all()->where('isAdmin', '=', true));
      } 
-
-    // user profile tests passed
-    public function test_user_no_auth_can_not_see_teacher_profile()
+     // done //
+ 
+    // user profile //
+    public function test_user_no_director_can_not_see_teacher_profile()
     {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create();
-
-        $currentUser = User::factory()->create();
-    
-        $this->actingAs($currentUser);
-
-        $response = $this->get(route('profile', $user->id));
-        $response->assertStatus(401);
+        $director = Teacher::factory()->create([
+            'superAdmin' => false
+        ]);
+ 
+         $student = User::factory()->create();
+     
+        $this->actingAs($director);
+         $response = $this->get(route('profileTeacher', $student->id));
+         $response->assertStatus(401);
     }
 
-    public function test_if_auth_user_no_director_can_not_see_teacher_profile()
+    public function test_if_auth_user_director_can__see_teacher_profile()
     {
-        $this->withExceptionHandling();
-
-        $user = User::factory()->create([
-            'isAdmin' => true
-        ]);
+        $this->withoutExceptionHandling();
 
         Sanctum::actingAs(
-            $user = User::factory()->create([
-                   'superAdmin' => false
-            ])
-        ); 
-
-
-        $response = $this->get(route('profile', $user->id));        
-        $response->assertStatus(401);
+        $director = Teacher::factory()->create([
+            'superAdmin' => true
+        ])
+    );
+         $student = User::factory()->create();
+     
+         $this->actingAs($director);
+         $response = $this->get(route('profileTeacher', $student->id));
+         $response->assertStatus(200);
     }
+    // done //
 
-    public function test_if_auth_user_director_can_see_teacher_profile()
-    {
-        $this->withExceptionHandling();
-
-        $teacher = User::factory()->create([
-            'isAdmin' => true
-        ]);
-
-        User::factory()->create([
-            'isAdmin' => false
-        ]);
-
-        Sanctum::actingAs(
-            $user = User::factory()->create([
-                   'superAdmin' => true
-            ])
-        ); 
-
-        $response = $this->get(route('profile', $teacher->id));        
-        $response->assertStatus(200);
-    } 
-
-    // delete tests passed
+    // delete //
     public function test_delete_teacher_no_auth_user() {
         $this->withoutExceptionHandling();
 
