@@ -53,6 +53,41 @@ class GameController extends Controller
         ]);
     }
 
+    // game - send correction 
+    public function sendCorrection(Request $request, $id)
+    {
+        $teacher = auth()->user();
+
+        $student = User::where('teacher_id', '=', $teacher->id)
+            ->findOrFail($id);
+
+        $student->correction = $request->correct;
+
+        $student->update();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'User correction sent',
+            'data' => $student
+        ], 200);
+    }
+
+    // game - set correction to null function
+    public function correctionNull(Request $request)
+    {
+        $student = auth()->user();
+
+        $student->correction = $request->correction;
+
+        $student->update();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'This is the correction',
+            'data' => $student
+        ]);
+    }
+
     // game - send word function
     public function sendWord(Request $request)
     {
@@ -111,55 +146,21 @@ class GameController extends Controller
         ]);
     }
 
-    // game - send correction 
-    public function sendCorrection(Request $request, $id)
-    {
-        $teacher = auth()->user();
-
-        $student = User::where('teacher_id', '=', $teacher->id)
-            ->findOrFail($id);
-
-        $student->correction = $request->correct;
-
-        $student->update();
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'User correction sent',
-            'data' => $student
-        ], 200);
-    }
-
-    // game - set correction to null function
-    public function correctionNull(Request $request)
-    {
-        $student = auth()->user();
-
-        $student->correction = $request->correction;
-
-        $student->update();
-
-        return response()->json([
-            'status' => 1,
-            'msg' => 'This is the correction',
-            'data' => $student
-        ]);
-    }
-
+    // game - change the show word in the database
     public function show(Request $request)
     {
         $teacher = auth()->user();
 
         $students = $teacher->users;
 
-        foreach($students as $student) {
+        foreach ($students as $student) {
             $student->show = $request->show;
 
             $student->update();
         }
 
-      
-       
+
+
         return response()->json([
             'status' => 1,
             'msg' => 'User show',
@@ -167,6 +168,7 @@ class GameController extends Controller
         ], 200);
     }
 
+    // game - get the show word 
     public function getShow()
     {
         $student = auth()->user();
