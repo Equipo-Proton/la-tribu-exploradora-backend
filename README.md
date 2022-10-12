@@ -54,14 +54,15 @@ Install dependencies
 
 ```bash
   npm install
+  
+  compooser update
 ```
 
 Start the server
 
 ```bash
    npm run dev
-```
-```bash
+
    php artisan serve
 ```
 
