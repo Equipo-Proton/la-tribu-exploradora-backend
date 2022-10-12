@@ -1,8 +1,8 @@
-## Project's name: Aña añerando la tribu exploradora
+# Project's name: Aña añerando la tribu exploradora
 
 <p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/img/HeaderLogo.png"/> </p>
 
-## Table of contents
+# Table of contents
 
 - [General info](#general-info)
 - [Visual design](#visual-design)
@@ -14,7 +14,7 @@
 - [General characteristics](#general-characteristics)
 - [Work methodology](#work-methodology)
 
-## General info
+# General info
 
 This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNALÓN). A Web Application as a Game to help kids between 3 to 6 six years old to learn words and vocabulary while they are playing a game. As a software team we have to build an app that allows children learn by doing through techonology.
 
@@ -27,13 +27,13 @@ This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNA
 <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/gifs/Desktop-Game.gif"/>
 </details>
 
-## Technologies
+# Technologies
 
 |                                                                                                                                       Front End                                                                                                                                       |                                                                Back End                                                                 |                                                                                             Diseño y organización                                                                                              |
 | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/Yelose/Yelose/blob/main/img/vscode.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/html.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/bootstrap.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/css.png"> | <img src="https://github.com/Yelose/Yelose/blob/main/img/php.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/mysql.png"> | <img src="https://github.com/Yelose/Yelose/blob/main/img/figma.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/jira.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/google.png"> |
 
-## Setup
+# Setup
 
 To run this project, install it locally using npm.
 
