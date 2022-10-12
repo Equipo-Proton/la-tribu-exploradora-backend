@@ -13,6 +13,8 @@
 - [Game description](#game-description)
 - [General characteristics](#general-characteristics)
 - [Work methodology](#work-methodology)
+- [Learnings](#learnings)
+- [Next steps](#next-steps)
 
 # General info
 
@@ -129,6 +131,22 @@ Our workflow in git was as follows, we all started from the Main branch with the
 - TDD, software test-driven development.
 - We use Agile methodology in a Scrum framework.
 - We separated the team into departments with front or back tasks, and we did pair programming to connect the two parts of the project
+
+# Learnings
+
+- Create a web application from scratch with separate backend and frontend repository.
+- Creation of views by components and modals for animations.
+- Keyboard with dragable keys.
+- Creation of role system for users.
+
+# Next steps
+
+- [x] Caps button for the game keyboard
+- [ ] Sound on the keyboard when pressing a letter
+- [ ] Sound on the keyboard when receiving a notification
+- [ ] Upload to production (Railway and/or other hosting)
+- [ ] Implement modals for all notifications
+- [ ] New game
 
 # Documentation
 
