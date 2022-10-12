@@ -7,7 +7,7 @@
 - [General info](#general-info)
 - [Visual design](#visual-design)
 - [Technologies](#technologies)
-- [Setup](#setup)
+- [Setup backend](#setup)
 - [Versions](#versions)
 - [Requirements](#requirements)
 - [Game description](#game-description)
