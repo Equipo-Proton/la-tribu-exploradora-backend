@@ -1,6 +1,6 @@
 ## Project's name: Aña añerando la tribu exploradora
 
-<p align="center"> <img src="src/assets/img/HeaderLogo.png"/> </p>
+<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/img/HeaderLogo.png/> </p>
 
 ## Table of contents
 
@@ -20,12 +20,11 @@ This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNA
 
 ## Visual Design
 
-<img src="src/assets/gifs/Desktop-APP.gif"/>
+<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/gifs/Desktop-APP.gif"/>
 
 <details><summary>Game</summary>
 
-<img src="src/assets/gifs/Desktop-Game.gif"/>
-
+<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/gifs/Desktop-Game.gif"/>
 </details>
 
 ## Technologies
