@@ -1,6 +1,6 @@
 ## Project's name: Aña añerando la tribu exploradora
 
-<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/img/HeaderLogo.png"/> </p>
+<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/img/HeaderLogo.png"/> </p>
 
 ## Table of contents
 
@@ -20,11 +20,11 @@ This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNA
 
 ## Visual Design
 
-<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/gifs/Desktop-APP.gif"/>
+<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/gifs/Desktop-APP.gif"/>
 
 <details><summary>Game</summary>
 
-<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/gifs/Desktop-Game.gif"/>
+<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/gifs/Desktop-Game.gif"/>
 </details>
 
 ## Technologies
@@ -76,7 +76,7 @@ Start the server, run Apache and MySQL server in XAMPP
 
 ## Versions
 
-<p align="center"> <img src="src/assets/img/Versions.png"/> </p>
+<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/img/Versions.png"/> </p>
 Our workflow in git was as follows, we all started from the Main branch with the same base, implementations, changes and features were made in the Develop branch, they were tested in the Release branch and from Release versions with checkpoints were released and updated the Develop branch to continue development with all the features tested and thus not generate a cycle of bugs.
 
 ## Requirements
