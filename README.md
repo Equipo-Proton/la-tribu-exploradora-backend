@@ -42,12 +42,13 @@ Clone the project
 
 ```bash
   git clone https://github.com/Equipo-Proton/la-tribu-exploradora-frontend.git
+  git clone https://github.com/Equipo-Proton/la-tribu-exploradora-backend.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd la-tribu-exploradora-frontend
+  cd la-tribu-exploradora-backend
 ```
 
 Install dependencies
@@ -60,6 +61,9 @@ Start the server
 
 ```bash
    npm run dev
+```
+```bash
+   php artisan serve
 ```
 
 ## Running Tests
