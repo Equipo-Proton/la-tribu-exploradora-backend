@@ -1,6 +1,6 @@
 ## Project's name: Aña añerando la tribu exploradora
 
-<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/img/HeaderLogo.png/> </p>
+<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/readme/src/assets/img/HeaderLogo.png"/> </p>
 
 ## Table of contents
 
