@@ -86,6 +86,18 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function logoutDirector() {
+        $director = auth()->user();
+
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => "User logout",
+            'data' => $director,
+        ], 200);
+    }
+
     // list 
     public function list()
     {

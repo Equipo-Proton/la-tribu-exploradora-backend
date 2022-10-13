@@ -15,6 +15,7 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 // students http requests
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('isadmin');
+    Route::get('/logoutdirector', [UserController::class, 'logoutDirector'])->name('logoutDirector')->middleware('superadmin');
     Route::get('/student/list', [UserController::class, 'list'])->name('listStudents')->middleware('isadmin');
     Route::get('/student/profile/{id}', [UserController::class, 'profile'])->name('profileStudent')->middleware('isadmin');
     Route::post('/student/register', [UserController::class, 'register'])->name('registerStudent')->middleware('isadmin');
