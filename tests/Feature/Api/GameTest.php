@@ -33,6 +33,7 @@ class GameTest extends TestCase
         $student = $student->fresh();
 
         $this->assertEquals(false, $student->play_permission);
+        $this->assertCount(1, User::all());
     }
 
    /*  public function test_teacher_change_play_permission() {
