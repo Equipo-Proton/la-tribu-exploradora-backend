@@ -1,13 +1,13 @@
-# Project's name: Aña añerando la tribu exploradora
+## Project's name: Aña añerando la tribu exploradora
 
-<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/img/HeaderLogo.png"/> </p>
+<p align="center"> <img src="src/assets/img/HeaderLogo.png"/> </p>
 
-# Table of contents
+## Table of contents
 
 - [General info](#general-info)
 - [Visual design](#visual-design)
 - [Technologies](#technologies)
-- [Setup backend](#setup)
+- [Setup frontend](#setup)
 - [Versions](#versions)
 - [Requirements](#requirements)
 - [Game description](#game-description)
@@ -16,17 +16,19 @@
 - [Learnings](#learnings)
 - [Next steps](#next-steps)
 
+
 # General info
 
-This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNALÓN). A Web Application as a Game to help kids between 3 to 6 six years old to learn words and vocabulary while they are playing a game. As a software team we have to build an app that allows children learn by doing through techonology.
+This is a project made for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNALÓN). A Web Application as a Game to help kids between 3 to 6 six years old to learn words and vocabulary while they are playing a game. As a software team we had to build an app that allowed children to learn by doing through techonology.
 
-## Visual Design
+# Visual Design
 
-<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/gifs/Desktop-APP.gif"/>
+<img src="src/assets/gifs/Desktop-APP.gif"/>
 
 <details><summary>Game</summary>
 
-<img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/gifs/Desktop-Game.gif"/>
+<img src="src/assets/gifs/Desktop-Game.gif"/>
+
 </details>
 
 # Technologies
@@ -35,7 +37,7 @@ This is a project make for Ciudad Industrial del Valle del Nalón, S.A.U. (VALNA
 | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/Yelose/Yelose/blob/main/img/vscode.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/html.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/bootstrap.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/css.png"> | <img src="https://github.com/Yelose/Yelose/blob/main/img/php.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/mysql.png"> | <img src="https://github.com/Yelose/Yelose/blob/main/img/figma.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/jira.png"> <img src="https://github.com/Yelose/Yelose/blob/main/img/google.png"> |
 
-# Setup
+## Setup
 
 To run this project, install it locally using npm.
 
@@ -49,46 +51,34 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd la-tribu-exploradora-backend
+  cd la-tribu-exploradora-frontend
 ```
 
 Install dependencies
 
 ```bash
   npm install
-  
-  compooser update
 ```
 
-Start the server, run Apache and MySQL server in XAMPP
-
-```bash
- php artisan migrate:fresh --seed
-```
+Start the server
 
 ```bash
    npm run dev
-
-   php artisan serve
 ```
 
-## Running Tests
+# Versions
 
-`php artisan test` o `vendor/bin/phpunit`
+<p align="center"> <img src="src/assets/img/Versions.png"/> </p>
+Our workflow in git was as follows, we all started from the Main branch with the same base. Implementations, changes and features were made in the Develop branch, they were tested in the Release branch and from Release versions with checkpoints were released and updated the Develop branch to continue development with all the features tested and thus not generate a cycle of bugs.
 
-## Versions
+# Requirements
 
-<p align="center"> <img src="https://github.com/Equipo-Proton/la-tribu-exploradora-frontend/blob/main/src/assets/img/Versions.png"/> </p>
-Our workflow in git was as follows, we all started from the Main branch with the same base, implementations, changes and features were made in the Develop branch, they were tested in the Release branch and from Release versions with checkpoints were released and updated the Develop branch to continue development with all the features tested and thus not generate a cycle of bugs.
-
-## Requirements
-
-- [x] App will have some administrators (teachers) and some users (classes). One user is a class.
+- [x] App will have some administrators (teachers) and some users (student groups). One user is a group of students.
 - [x] Teachers can choose what games are active.
-- [x] Users only can play to active games.
+- [x] Users only can play active games.
 - [x] We will build a game.
 - [x] Plain design. Adaptative design (children).
-- [x] Responsive design (tablet, computer and digital board.
+- [x] Responsive design (tablet, computer and digital board).
 - [x] Project will be 100% scalable and we will can add more games.
 - [x] Project will be 100% tested.
 
@@ -98,7 +88,7 @@ Our workflow in git was as follows, we all started from the Main branch with the
 <li>Game consists of numbers and letters.</li>
 <li>Numbers available (0-9). Letters available (A-Z).</li>
 <li>Admin's screen will start the game and users will have to guess the word, moving the letters.</li>
-<li>Admin on his screen will decide correct or wrong and the result will be visual.</li>
+<li>Admin on their screen will decide if the answer is correct or wrong and the result will be visual.</li>
 </ul>
 
 # General characteristics
@@ -130,14 +120,14 @@ Our workflow in git was as follows, we all started from the Main branch with the
 
 - TDD, software test-driven development.
 - We use Agile methodology in a Scrum framework.
-- We separated the team into departments with front or back tasks, and we did pair programming to connect the two parts of the project
+- We separated the team into departments with front or back tasks, and we practised pair programming to connect the two parts of the project
 
 # Learnings
 
-- Create a web application from scratch with separate backend and frontend repository.
+- Create a web application from scratch with separated backend and frontend repository.
 - Creation of views by components and modals for animations.
-- Keyboard with dragable keys.
-- Creation of role system for users.
+- Keyboard with draggable keys.
+- Creation of a role system for users.
 
 # Next steps
 
@@ -150,8 +140,8 @@ Our workflow in git was as follows, we all started from the Main branch with the
 
 # Documentation
 
-- [Dailys](https://docs.google.com/document/d/1gGHcJYTPoZo_kbkBN_cQCpXgPu5JvurKWr8xd1vH7Lo/edit)
-- [Presentation PPTX](https://docs.google.com/presentation/d/1TiQ86Y-N194oHaoAA1V5erXUQw2_3wZ_YzafjYdXoQs/edit?usp=sharing)
+- [Dailies](https://docs.google.com/document/d/1gGHcJYTPoZo_kbkBN_cQCpXgPu5JvurKWr8xd1vH7Lo/edit)
+- [Presentation](https://view.genial.ly/63440989521ed300114a2b23/presentation-proyecto-ana)
 - [Prototype](https://www.figma.com/file/HCGDAXOHXuOM567hPHBryR/Proyecto-Pedag%C3%B3gico?node-id=111%3A3)
 - [UserFlow](https://www.figma.com/file/R3aFH6bPeETNHazU5k2zO4/Valnal%C3%B3n-User-Flow?node-id=0%3A1)
 
