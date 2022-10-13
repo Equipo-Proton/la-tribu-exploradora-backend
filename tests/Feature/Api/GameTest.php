@@ -36,7 +36,7 @@ class GameTest extends TestCase
         $this->assertCount(1, User::all());
     }
 
-   /*  public function test_teacher_change_play_permission() {
+  /*   public function test_teacher_change_play_permission() {
         $this->withoutExceptionHandling();
 
         Sanctum::actingAs(
@@ -45,7 +45,9 @@ class GameTest extends TestCase
             ])
         );
 
-        $student = User::factory()->create([]);
+        $student = User::factory()->create([
+            'teacher_id' => 1
+        ]);
 
         $this->actingAs($teacher);
         $response = $this->patch(route('changePermission'), [
