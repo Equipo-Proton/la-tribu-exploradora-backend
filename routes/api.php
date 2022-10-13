@@ -51,5 +51,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // show correction to the student
     Route::patch('/game/show', [GameController::class, 'show'])->name('show');
-    Route::get('/game/getshow', [GameController::class, 'getShow'])->name('getShow')->name('getShow');
+    Route::get('/game/getshow', [GameController::class, 'getShow'])->name('getShow');
 });

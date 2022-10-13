@@ -128,12 +128,15 @@ class TeacherTest extends TestCase
             'superAdmin' => true
         ])
     );
-         $student = User::factory()->create();
+         $student1 = User::factory()->create();
+         $student2 = User::factory()->create();
+         $student3 = User::factory()->create();
      
          $this->actingAs($director);
  
          $response = $this->get(route('listTeachers'));
          $response->assertStatus(200);
+         $this->assertCount(3, User::all());
      } 
      // done //
  
@@ -162,11 +165,14 @@ class TeacherTest extends TestCase
             'superAdmin' => true
         ])
     );
-         $student = User::factory()->create();
+         $student = User::factory()->create([
+            'name' => 'Guillermo'
+         ]);
      
          $this->actingAs($director);
          $response = $this->get(route('profileTeacher', $student->id));
          $response->assertStatus(200);
+         $this->assertEquals('Guillermo', $student->name);
     }
     // done //
 
@@ -190,11 +196,13 @@ class TeacherTest extends TestCase
 
         $response = $this->delete(route('deleteTeacher', $teacher->id));
         $response->assertStatus(401);
+        $this->assertCount(3, Teacher::all());
 
         $this->actingAs($directorTrue);
 
         $response = $this->delete(route('deleteTeacher', $teacher->id));
         $response->assertStatus(200);
+        $this->assertCount(2, Teacher::all());
     }
 
 
@@ -214,6 +222,7 @@ class TeacherTest extends TestCase
         $this->actingAs($student);
         $response = $this->delete(route('deleteTeacher', $teacher->id));
         $response->assertStatus(401);
+        $this->assertCount(2, Teacher::all());
     }
     // done //
 

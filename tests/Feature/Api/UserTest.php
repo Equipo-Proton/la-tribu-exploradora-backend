@@ -211,11 +211,13 @@ class UserTest extends TestCase
         ])
         );
 
-        $noTeacher = User::factory()->create([]);
+        $noTeacher1 = User::factory()->create([]);
+        $noTeacher2 = User::factory()->create([]);
        
         $this->actingAs($teacher);
         $response = $this->get(route('listStudents'));
         $response->assertStatus(200);
+        $this->assertCount(2, User::all());
     }
     // done //
 
@@ -236,25 +238,6 @@ class UserTest extends TestCase
         $response = $this->get(route('profileStudent', $student->id));
         $response->assertStatus(401);
     }
-
-  /*   public function test_if_auth_user_no_teacher_can_not_see_user_profile()
-    {
-        $this->withoutExceptionHandling();
-
-        Sanctum::actingAs(
-            $teacher = Teacher::factory()->create([
-                'isAdmin' => true
-            ])
-        );
-       
-        Sanctum::actingAs(
-            $student = User::factory()->create([])
-        );
-
-        $this->actingAs($teacher);
-        $response = $this->get(route('profileStudent', $student->id));
-        $response->assertStatus(200);
-    } */
     // done //
 
     // delete //
@@ -269,6 +252,7 @@ class UserTest extends TestCase
         $this->actingAs($teacher);
         $response = $this->delete(route('deleteStudent', $student->id));
         $response->assertStatus(401);
+        $this->assertCount(1, User::all());
     }
 
     public function test_delete_auth_user_no_teacher()
@@ -288,6 +272,7 @@ class UserTest extends TestCase
         $this->actingAs($userNoTeacher);
         $response = $this->delete(route('deleteStudent', $student->id));
         $response->assertStatus(401);
+        $this->assertCount(2, User::all());
     }
 
     public function test_delete_auth_user_teacher()
@@ -305,6 +290,7 @@ class UserTest extends TestCase
         $this->actingAs($teacher);
         $response = $this->delete(route('deleteStudent', $student->id));
         $response->assertStatus(200);
+        $this->assertCount(0, User::all());
     }
     // done //
 

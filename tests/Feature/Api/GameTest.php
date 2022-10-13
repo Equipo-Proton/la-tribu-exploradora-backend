@@ -25,7 +25,7 @@ class GameTest extends TestCase
         $student = User::factory()->create([]);
 
         $response = $this->patch(route('changePermission'), [
-            'play_permission' => true
+            'play_permission' => 1
         ]);
 
         $response->assertStatus(401);
@@ -35,31 +35,6 @@ class GameTest extends TestCase
         $this->assertEquals(false, $student->play_permission);
         $this->assertCount(1, User::all());
     }
-
-  /*   public function test_teacher_change_play_permission() {
-        $this->withoutExceptionHandling();
-
-        Sanctum::actingAs(
-            $teacher = Teacher::factory()->create([
-                'isAdmin' => true
-            ])
-        );
-
-        $student = User::factory()->create([
-            'teacher_id' => 1
-        ]);
-
-        $this->actingAs($teacher);
-        $response = $this->patch(route('changePermission'), [
-            'play_permission' => true
-        ]);
-
-        $response->assertStatus(200);
-
-        $student->fresh();
-
-        $this->assertEquals(true, $student->play_permission);
-    } */
 
     public function test_auth_user_can_get_permission() {
         $this->withoutExceptionHandling();
@@ -74,6 +49,12 @@ class GameTest extends TestCase
             ])
         );
 
+        $response = $this->get(route('getPermission'));
+        $response->assertStatus(200);
+
+        $this->assertEquals(true, $student->play_permission);
+
+        $this->actingAs($teacher);
         $response = $this->get(route('getPermission'));
         $response->assertStatus(200);
 
@@ -98,32 +79,13 @@ class GameTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertEquals(true, $student->correction);
-    }
 
-   /*  public function test_teacher_send_correction() {
-        $this->withoutExceptionHandling();
-
-        Sanctum::actingAs(
-            $teacher = Teacher::factory()->create([
-                'isAdmin' => true
-            ])
-        );
-
-        $student = User::factory()->create([
-            'teacher_id' => $teacher->id,
-            'correction' => null
-        ]);
-
-        $response = $this->patch(route('sendCorrection', $student->id), [
-            'correction' => true
-        ]);
-
+        $this->actingAs($teacher);
+        $response = $this->get(route('getCorrection'));
         $response->assertStatus(200);
 
-        $student->fresh();
-
         $this->assertEquals(true, $student->correction);
-    } */
+    }
 
     // show
     public function test_auth_user_can_get_show() {
@@ -139,35 +101,15 @@ class GameTest extends TestCase
             ])
         );
 
-        $response = $this->get(route('getCorrection'));
+        $response = $this->get(route('getShow'));
+        $response->assertStatus(200);
+
+        $this->assertEquals(true, $student->show);
+
+        $this->actingAs($teacher);
+        $response = $this->get(route('getShow'));
         $response->assertStatus(200);
 
         $this->assertEquals(true, $student->show);
     }
-  
-   /*  public function test_teacher_send_correction() {
-        $this->withoutExceptionHandling();
-
-        Sanctum::actingAs(
-            $teacher = Teacher::factory()->create([
-                'isAdmin' => true
-            ])
-        );
-
-        $student = User::factory()->create([
-            'show' => false,
-            'teacher_id' => 1
-        ]);
-
-        $response = $this->patch(route('show'), [
-            'show' => true
-        ]);
-
-        $response->assertStatus(200);
-
-        $student->fresh();
-
-        $this->assertEquals(true, $student->show);
-    }  */
-
 }
