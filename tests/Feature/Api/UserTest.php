@@ -5,14 +5,8 @@ namespace Tests\Feature;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
 {
@@ -177,7 +171,7 @@ class UserTest extends TestCase
     }
     // done //
 
-     // users list //
+    // users list //
     public function test_user_no_auth_can_not_see_users_list()
     {
         $this->withoutExceptionHandling();

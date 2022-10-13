@@ -10,7 +10,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // students http requests
@@ -38,12 +37,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::patch('/game/changepermission', [GameController::class, 'changePlayPermission'])->name('changePermission')->middleware('isadmin');
     Route::get('/game/getpermission', [GameController::class, 'getPlayPermission'])->name('getPermission');
     Route::patch('/game/sendword', [GameController::class, 'sendWord'])->name('sendWord');
-    Route::patch('/game/sendcorrection/{id}', [GameController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
     Route::patch('/game/wordnull', [GameController::class, 'wordNull'])->name('wordNull')->middleware('isadmin');
     Route::patch('/game/wordnull/{id}', [GameController::class, 'wordStudentNull'])->name('wordStudentNull')->middleware('isadmin');
     Route::patch('/game/show', [GameController::class, 'show'])->name('show');
-    Route::get('/game/getshow', [GameController::class, 'getShow'])->name('getShow');
-    Route::get('/game/getcorrection', [GameController::class, 'getCorrection']);
+    Route::get('/game/getshow', [GameController::class, 'getShow'])->name('getShow')->name('getShow');
+    Route::patch('/game/sendcorrection/{id}', [GameController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
+    Route::get('/game/getcorrection', [GameController::class, 'getCorrection'])->name('getCorrection');
     Route::patch('/game/correctionnull', [GameController::class, 'correctionNull'])->name('correctionNull');
 });
-

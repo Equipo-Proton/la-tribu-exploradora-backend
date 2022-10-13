@@ -5,7 +5,6 @@ namespace Tests\Feature\Api;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -172,71 +171,70 @@ class TeacherTest extends TestCase
     // done //
 
     // delete //
-    public function test_delete_teacher_no_auth_user() {
+    public function test_no_director_no_delete_teacher() {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create();
+       
+            $directorFalse = Teacher::factory()->create([
+                 'superAdmin' => false
+            ]);
+
+            $directorTrue = Teacher::factory()->create([
+                'superAdmin' => true
+           ]);
+      
+
+        $teacher = Teacher::factory()->create();
     
-        $this->actingAs($user);
+        $this->actingAs($directorFalse);
 
-        $response = $this->delete(route('deleteTeacher', $user->id));
+        $response = $this->delete(route('deleteTeacher', $teacher->id));
         $response->assertStatus(401);
-    }
 
-    public function test_delete_teacher__auth_user_no_director() {
-        $this->withoutExceptionHandling();
+        $this->actingAs($directorTrue);
 
-        $user = User::factory()->create([
-            'isAdmin' => true
-        ]);
-
-        Sanctum::actingAs(
-            $userNoTeacher = User::factory()->create([
-                   'superAdmin' => false
-            ])
-        ); 
-
-        $response = $this->delete(route('deleteTeacher', $user->id));
-        $response->assertStatus(401);
-    }
-
-    public function test_delete_user__auth_user_teacher() {
-        $this->withoutExceptionHandling();
-
-        $user = User::factory()->create([
-            'isAdmin' => true
-        ]);
-
-        Sanctum::actingAs(
-            $userTeacher = User::factory()->create([
-                   'superAdmin' => true
-            ])
-        ); 
-
-        $response = $this->delete(route('deleteTeacher', $user->id));
+        $response = $this->delete(route('deleteTeacher', $teacher->id));
         $response->assertStatus(200);
     }
 
-    
-    public function test_admin_can_edit_teacher() 
+
+    public function test_student_can_not_delete_teacher() {
+        $this->withoutExceptionHandling();
+
+        $director = Teacher::factory()->create([
+            'superAdmin' => true
+        ]);
+
+        $teacher = Teacher::factory()->create([
+            'superAdmin' => false
+        ]);
+
+        $student = User::factory()->create([]);
+
+        $this->actingAs($student);
+        $response = $this->delete(route('deleteTeacher', $teacher->id));
+        $response->assertStatus(401);
+    }
+    // done //
+
+    // edit //  
+    public function test_director_can_edit_teacher() 
     {
         $this->withExceptionHandling();
 
         Sanctum::actingAs(
-            $admin = User::factory()->create([
+            $director = Teacher::factory()->create([
                 'superAdmin' => true
             ])
         );
 
-        $teacher = User::factory()->create([
-            'isAdmin' => true,
-            'superAdmin' => false,
+        $teacher = Teacher::factory()->create([
             'email' => 'test@gmail.com'
         ]);
         
         $response = $this->patch(route('updateTeacher', $teacher->id), [
             'name' => 'New Name',
-            'email' => $teacher->email,
+            'email' => 'kerim@gmail.com',
             'password' => 'password',
             'showPassword' => 'password'
         ]);
@@ -245,30 +243,27 @@ class TeacherTest extends TestCase
 
         $teacher = $teacher->fresh();
 
-        $this->assertEquals('New Name', $teacher->name);
-        $this->assertEquals('test@gmail.com', $teacher->email);
+       
+        $this->assertEquals('kerim@gmail.com', $teacher->email);
     }
     
-    public function test_no_admin_can_not_edit_teacher() 
+    public function test_no_director_can_not_edit_teacher() 
     {
         $this->withExceptionHandling();
 
         Sanctum::actingAs(
-            $noAdmin = User::factory()->create([
+            $teacher = Teacher::factory()->create([
                 'superAdmin' => false
             ])
         );
 
-        $teacher = User::factory()->create([
-            'name'  => 'Guillermo',
-            'isAdmin' => true,
-            'superAdmin' => false,
+        $teacher = Teacher::factory()->create([
             'email' => 'guille@gmail.com'
         ]);
         
         $response = $this->patch(route('updateTeacher', $teacher->id), [
             'name' => 'New Name',
-            'email' => $teacher->email,
+            'email' => 'kerim@gmail.com',
             'password' => 'password',
             'showPassword' => 'password'
         ]);
@@ -277,7 +272,7 @@ class TeacherTest extends TestCase
 
         $teacher = $teacher->fresh();
 
-        $this->assertEquals('Guillermo', $teacher->name);
         $this->assertEquals('guille@gmail.com', $teacher->email);
     }    
+    // done //
 }
