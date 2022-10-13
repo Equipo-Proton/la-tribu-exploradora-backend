@@ -7,10 +7,11 @@ use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
 
 class UserController extends Controller
 {
-    // students - login function
+    // login
     public function login(Request $request)
     {
         $request->validate([
@@ -65,7 +66,7 @@ class UserController extends Controller
         ], 404);
     }
 
-    // teachers - logout function
+    // logout 
     public function logout()
     {
         $teacher = auth()->user();
@@ -74,10 +75,10 @@ class UserController extends Controller
 
         auth()->user()->tokens()->delete();
 
-        foreach($students as $student) {
+        foreach ($students as $student) {
             $student->tokens()->delete();
         }
-           
+
         return response()->json([
             'status' => 1,
             'msg' => "User logout",
@@ -85,7 +86,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    // students - list function
+    // list 
     public function list()
     {
         $teacher = auth()->user();
@@ -99,85 +100,121 @@ class UserController extends Controller
         ], 200);
     }
 
-    // students - profile function
+    // profile
     public function profile($id)
     {
-        $teacher = auth()->user();
+        try {
+            $teacher = auth()->user();
 
-        $student = $teacher->users
-            ->find($id);
+            $student = $teacher->users
+                ->findOrFail($id);
 
-        return response()->json([
-            "status" => 1,
-            "msg" => "Student profile",
-            "data" => $student
-        ], 200);
+            return response()->json([
+                "status" => 1,
+                "msg" => "Student profile",
+                "data" => $student
+            ], 200);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                "status" => 0,
+                "msg" => "Student not found"
+            ], 404);
+        }
     }
 
-    // students - register / create function
+    // register 
     public function register(Request $request)
     {
-        $teacher = auth()->user();
+        try {
+            $teacher = auth()->user();
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|confirmed'
+            ]);
 
-        $newStudent = new User();
+            $newStudent = new User();
 
-        $newStudent->name = $request->name;
-        $newStudent->email = $request->email;
-        $newStudent->password = Hash::make($request->password);
-        $newStudent->showPassword = $request->password;
-        $newStudent->teacher_id = $teacher->id;
+            $newStudent->name = $request->name;
+            $newStudent->email = $request->email;
+            $newStudent->password = Hash::make($request->password);
+            $newStudent->showPassword = $request->password;
+            $newStudent->teacher_id = $teacher->id;
 
-        $newStudent->save();
+            $newStudent->save();
 
-        return response()->json([
-            'status' => 1,
-            'msg' => 'Student created',
-            'data' =>  $newStudent
-        ], 200);
+            return response()->json([
+                'status' => 1,
+                'msg' => 'Student created',
+                'data' =>  $newStudent
+            ], 200);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                "status" => 0,
+                "msg" => "Register data incorrect"
+            ], 400);
+        }
     }
 
-    // students - delete function
+    // delete 
     public function delete($id)
     {
-        $teacher = auth()->user();
+        try {
+            $teacher = auth()->user();
 
-        $student = $teacher->users
-            ->find($id);
+            $student = $teacher->users
+                ->find($id);
 
-        $student->delete();
+            $student->delete();
 
-        return response()->json([
-            "status" => 1,
-            "msg" => "Student deleted"
-        ], 200);
+            return response()->json([
+                "status" => 1,
+                "msg" => "Student deleted"
+            ], 200);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                "status" => 0,
+                "msg" => "Student not found"
+            ], 404);
+        }
     }
 
-     // students - update function
+    // update 
     public function update(Request $request, $id)
     {
-        $teacher = auth()->user();
+        try {
+            $teacher = auth()->user();
 
-        $student = $teacher->users
-            ->find($id);
+            $student = $teacher->users
+                ->find($id);
 
-        $student ->name = $request->name;
-        $student ->email = $request->email;
-        $student ->password = Hash::make($request->password);
-        $student ->showPassword = $request->password;
+            $student->name = $request->name;
+            $student->email = $request->email;
+            $student->password = Hash::make($request->password);
+            $student->showPassword = $request->password;
 
-        $student ->update();
+            $student->update();
 
 
-        return response()->json([
-            'status' => 1,
-            'msg' => 'Student updated',
-            'data' => $student 
-        ], 200);
+            return response()->json([
+                'status' => 1,
+                'msg' => 'Student updated',
+                'data' => $student
+            ], 200);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                "status" => 0,
+                "msg" => "Student not found"
+            ], 404);
+        }
     }
 }

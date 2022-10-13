@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Throwable;
 
 class GameController extends Controller
 {
-    // game - permission function
+    // game permission
     public function changePlayPermission(Request $request)
     {
         $teacher = auth()->user();
@@ -29,7 +30,7 @@ class GameController extends Controller
         ], 200);
     }
 
-    // game - get play permission
+    // get play permission
     public function getPlayPermission()
     {
         $student = auth()->user();
@@ -41,7 +42,7 @@ class GameController extends Controller
         ]);
     }
 
-    // game - get correction
+    // get correction
     public function getCorrection()
     {
         $student = auth()->user();
@@ -53,26 +54,35 @@ class GameController extends Controller
         ]);
     }
 
-    // game - send correction 
+    // send correction 
     public function sendCorrection(Request $request, $id)
     {
-        $teacher = auth()->user();
+        try {
+            $teacher = auth()->user();
 
-        $student = User::where('teacher_id', '=', $teacher->id)
-            ->findOrFail($id);
+            $student = User::where('teacher_id', '=', $teacher->id)
+                ->findOrFail($id);
 
-        $student->correction = $request->correct;
+            $student->correction = $request->correct;
 
-        $student->update();
+            $student->update();
 
-        return response()->json([
-            'status' => 1,
-            'msg' => 'User correction sent',
-            'data' => $student
-        ], 200);
+            return response()->json([
+                'status' => 1,
+                'msg' => 'User correction sent',
+                'data' => $student
+            ], 200);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                "status" => 0,
+                "msg" => "Student not found"
+            ], 404);
+        }
     }
 
-    // game - set correction to null function
+    // set correction to null 
     public function correctionNull(Request $request)
     {
         $student = auth()->user();
@@ -88,7 +98,7 @@ class GameController extends Controller
         ]);
     }
 
-    // game - send word function
+    // send word function
     public function sendWord(Request $request)
     {
         $student = auth()->user();
@@ -104,7 +114,7 @@ class GameController extends Controller
         ]);
     }
 
-    // game - set word to null function
+    // set word to null function
     public function wordNull(Request $request)
     {
         $teacher = auth()->user();
@@ -125,28 +135,37 @@ class GameController extends Controller
         ]);
     }
 
-    // game - set student id word to null function
+    // set student word to null 
     public function wordStudentNull(Request $request, $id)
     {
-        $teacher = auth()->user();
+        try {
+            $teacher = auth()->user();
 
-        $student = User::where('teacher_id', '=', $teacher->id)
-            ->find($id);
-
-
-        $student->word = $request->word;
-
-        $student->update();
+            $student = User::where('teacher_id', '=', $teacher->id)
+                ->find($id);
 
 
-        return response()->json([
-            'status' => 1,
-            'msg' => 'This is the word',
-            'data' => $student
-        ]);
+            $student->word = $request->word;
+
+            $student->update();
+
+
+            return response()->json([
+                'status' => 1,
+                'msg' => 'This is the word',
+                'data' => $student
+            ]);
+        } catch (Throwable $e) {
+            report($e);
+
+            return response()->json([
+                "status" => 0,
+                "msg" => "Student not found"
+            ], 404);
+        }
     }
 
-    // game - change the show word in the database
+    // change the show word in the database
     public function show(Request $request)
     {
         $teacher = auth()->user();
@@ -159,8 +178,6 @@ class GameController extends Controller
             $student->update();
         }
 
-
-
         return response()->json([
             'status' => 1,
             'msg' => 'User show',
@@ -168,7 +185,7 @@ class GameController extends Controller
         ], 200);
     }
 
-    // game - get the show word 
+    // get the show word 
     public function getShow()
     {
         $student = auth()->user();

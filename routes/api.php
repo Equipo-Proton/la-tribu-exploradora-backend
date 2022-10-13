@@ -14,7 +14,7 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 
 // students http requests
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('isadmin');
     Route::get('/student/list', [UserController::class, 'list'])->name('listStudents')->middleware('isadmin');
     Route::get('/student/profile/{id}', [UserController::class, 'profile'])->name('profileStudent')->middleware('isadmin');
     Route::post('/student/register', [UserController::class, 'register'])->name('registerStudent')->middleware('isadmin');
@@ -34,14 +34,21 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 // game http routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // permission to play
     Route::patch('/game/changepermission', [GameController::class, 'changePlayPermission'])->name('changePermission')->middleware('isadmin');
     Route::get('/game/getpermission', [GameController::class, 'getPlayPermission'])->name('getPermission');
+
+    // send word / asnwer
     Route::patch('/game/sendword', [GameController::class, 'sendWord'])->name('sendWord');
     Route::patch('/game/wordnull', [GameController::class, 'wordNull'])->name('wordNull')->middleware('isadmin');
     Route::patch('/game/wordnull/{id}', [GameController::class, 'wordStudentNull'])->name('wordStudentNull')->middleware('isadmin');
-    Route::patch('/game/show', [GameController::class, 'show'])->name('show');
-    Route::get('/game/getshow', [GameController::class, 'getShow'])->name('getShow')->name('getShow');
+   
+    // send correction to the student
     Route::patch('/game/sendcorrection/{id}', [GameController::class, 'sendCorrection'])->name('sendCorrection')->middleware('isadmin');
     Route::get('/game/getcorrection', [GameController::class, 'getCorrection'])->name('getCorrection');
     Route::patch('/game/correctionnull', [GameController::class, 'correctionNull'])->name('correctionNull');
+
+    // show correction to the student
+    Route::patch('/game/show', [GameController::class, 'show'])->name('show');
+    Route::get('/game/getshow', [GameController::class, 'getShow'])->name('getShow')->name('getShow');
 });
